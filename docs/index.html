@@ -1,1 +1,61 @@
-hello
+<html>
+  <head>
+    <title>ink — community network</title>
+    <script src="main.js"></script>
+  </head>
+  <style>
+    @font-face {
+      font-family: NeutralFace;
+      src: url("NeutralFace.otf") format("opentype");
+    }
+
+    body {
+      font-family: "NeutralFace", Sans-Serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    main {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      letter-spacing: 2px;
+    }
+
+    h4 span {
+      color: #ccc;
+      font-size: 0.6rem;
+    }
+
+    .content {
+      position: absolute;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #gradient-canvas {
+      --gradient-color-1: #e6e6e6;
+      --gradient-color-2: #ccc;
+      --gradient-color-3: #f2f2f2;
+      --gradient-color-4: #fff;
+
+      width: 100vw;
+      height: 100vh;
+    }
+  </style>
+  <body>
+    <main>
+      <div class="content">
+        <h4>ink<span>.community</span></h4>
+      </div>
+      <canvas id="gradient-canvas"></canvas>
+    </main>
+    <script>
+      const gradient = new Gradient();
+      gradient.initGradient("#gradient-canvas");
+    </script>
+  </body>
+</html>
