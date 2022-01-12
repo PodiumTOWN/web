@@ -4,10 +4,12 @@ import { Route, Routes } from 'react-router-dom';
 import PostContainer from '../PostContainer/PostContainer';
 import PrivacyContainer from '../PrivacyContainer/PrivacyContainer';
 import TermsContainer from '../TermsContainer/TermsContainer';
+import HomeContainer from '../HomeContainer/HomeContainer';
 
 function AppContainer() {
   return (
     <Routes>
+      <Route path="/" element={<HomeContainer />} />
       <Route path="/:username/:postId" element={<PostContainer />} />
       <Route path="/privacy" element={<PrivacyContainer />} />
       <Route path="/eula" element={<TermsContainer />} />
