@@ -9,8 +9,8 @@ function HomeContainer() {
       style={{ height: '100vh', background: '#DFC8FF' }}
     >
       <Col>
-        <Row>
-          <img src="./assets/logo.png" alt="" />
+        <Row style={{ maxWidth: '100%' }}>
+          <img style={{ width: '100%' }} src="./assets/logo.png" alt="" />
         </Row>
         <Row justify="center" style={{ color: '#fff', fontWeight: 500 }}>
           ink.community
