@@ -3,12 +3,11 @@ import React from 'react';
 function TermsContainer() {
   return (
     <ol>
-      <li>
-        <span>License</span>
-        <span>
-          <br />
-        </span>
-      </li>
+      <strong>License</strong>
+      <span>
+        <br />
+      </span>
+
       <li value="1">
         <span>
           Under this Software License Agreement (the &apos;Agreement&apos;),
@@ -82,12 +81,12 @@ function TermsContainer() {
           <br />
         </span>
       </li>
-      <li>
-        <span>License Fee</span>
-        <span>
-          <br />
-        </span>
-      </li>
+
+      <strong>License Fee</strong>
+      <span>
+        <br />
+      </span>
+
       <li value="8">
         <span>
           The original purchase price paid by the Licensee will constitute the
@@ -97,12 +96,12 @@ function TermsContainer() {
           <br />
         </span>
       </li>
-      <li>
-        <span>Limitation of Liability</span>
-        <span>
-          <br />
-        </span>
-      </li>
+
+      <strong>Limitation of Liability</strong>
+      <span>
+        <br />
+      </span>
+
       <li value="9">
         <span>
           The Software is provided by the Vendor and accepted by the Licensee
@@ -118,6 +117,7 @@ function TermsContainer() {
           <br />
         </span>
       </li>
+
       <li value="10">
         <span>
           The Vendor makes no warranty expressed or implied regarding the
@@ -140,12 +140,12 @@ function TermsContainer() {
           <br />
         </span>
       </li>
-      <li>
-        <span>Warrants and Representations</span>
-        <span>
-          <br />
-        </span>
-      </li>
+
+      <strong>Warrants and Representations</strong>
+      <span>
+        <br />
+      </span>
+
       <li value="12">
         <span>
           The Vendor warrants and represents that it is the copyright holder of
@@ -157,12 +157,12 @@ function TermsContainer() {
           <br />
         </span>
       </li>
-      <li>
-        <span>Acceptance</span>
-        <span>
-          <br />
-        </span>
-      </li>
+
+      <strong>Acceptance</strong>
+      <span>
+        <br />
+      </span>
+
       <li value="13">
         <span>
           All terms, conditions and obligations of this Agreement will be deemed
@@ -173,12 +173,12 @@ function TermsContainer() {
           <br />
         </span>
       </li>
-      <li>
-        <span>User Support</span>
-        <span>
-          <br />
-        </span>
-      </li>
+
+      <strong>User Support</strong>
+      <span>
+        <br />
+      </span>
+
       <li value="14">
         <span>
           No user support or maintenance is provided as part of this Agreement.
@@ -187,13 +187,61 @@ function TermsContainer() {
           <br />
         </span>
       </li>
-      <li>
-        <span>Term</span>
+
+      <li value="15">
+        <span>
+          There is no tolerance for objectionable content or abusive users on
+          the platform.
+        </span>
         <span>
           <br />
         </span>
       </li>
-      <li value="15">
+
+      <li value="16">
+        <span>
+          Vendor provides a method for filtering objectionable content.
+        </span>
+        <span>
+          <br />
+        </span>
+      </li>
+
+      <li value="17">
+        <span>
+          Vendor provides a mechanism for users to flag objectionable content.
+        </span>
+        <span>
+          <br />
+        </span>
+      </li>
+
+      <li value="18">
+        <span>
+          Vendor provides a mechanism for users to block abusive users.
+        </span>
+        <span>
+          <br />
+        </span>
+      </li>
+
+      <li value="19">
+        <span>
+          Vendor must act on objectionable content reports within 24 hours by
+          removing the content and ejecting the user who provided the offending
+          content.
+        </span>
+        <span>
+          <br />
+        </span>
+      </li>
+
+      <strong>Term</strong>
+      <span>
+        <br />
+      </span>
+
+      <li value="20">
         <span>
           The term of this Agreement will begin on Acceptance and is perpetual.
         </span>
@@ -201,13 +249,13 @@ function TermsContainer() {
           <br />
         </span>
       </li>
-      <li>
-        <span>Termination</span>
-        <span>
-          <br />
-        </span>
-      </li>
-      <li value="16">
+
+      <strong>Termination</strong>
+      <span>
+        <br />
+      </span>
+
+      <li value="21">
         <span>
           This Agreement will be terminated and the License forfeited where the
           Licensee has failed to comply with any of the terms of this Agreement
@@ -219,13 +267,13 @@ function TermsContainer() {
           <br />
         </span>
       </li>
-      <li>
-        <span>Force Majeure</span>
-        <span>
-          <br />
-        </span>
-      </li>
-      <li value="17">
+
+      <strong>Force Majeure</strong>
+      <span>
+        <br />
+      </span>
+
+      <li value="22">
         <span>
           The Vendor will be free of liability to the Licensee where the Vendor
           is prevented from executing its obligations under this Agreement in
@@ -238,13 +286,13 @@ function TermsContainer() {
           <br />
         </span>
       </li>
-      <li>
-        <span>Governing Law</span>
-        <span>
-          <br />
-        </span>
-      </li>
-      <li value="18">
+
+      <strong>Governing Law</strong>
+      <span>
+        <br />
+      </span>
+
+      <li value="23">
         <span>
           The Parties to this Agreement submit to the jurisdiction of the courts
           of the State of Alabama for the enforcement of this Agreement or any
@@ -256,13 +304,13 @@ function TermsContainer() {
           <br />
         </span>
       </li>
-      <li>
-        <span>Miscellaneous</span>
-        <span>
-          <br />
-        </span>
-      </li>
-      <li value="19">
+
+      <strong>Miscellaneous</strong>
+      <span>
+        <br />
+      </span>
+
+      <li value="24">
         <span>
           This Agreement can only be modified in writing signed by both the
           Vendor and the Licensee.
@@ -271,7 +319,7 @@ function TermsContainer() {
           <br />
         </span>
       </li>
-      <li value="20">
+      <li value="25">
         <span>
           This Agreement does not create or imply any relationship in agency or
           partnership between the Vendor and the Licensee.
@@ -280,7 +328,7 @@ function TermsContainer() {
           <br />
         </span>
       </li>
-      <li value="21">
+      <li value="26">
         <span>
           Headings are inserted for the convenience of the parties only and are
           not to be considered when interpreting this Agreement. Words in the
@@ -293,7 +341,7 @@ function TermsContainer() {
           <br />
         </span>
       </li>
-      <li value="22">
+      <li value="27">
         <span>
           If any term, covenant, condition or provision of this Agreement is
           held by a court of competent jurisdiction to be invalid, void or
@@ -307,7 +355,7 @@ function TermsContainer() {
           <br />
         </span>
       </li>
-      <li value="23">
+      <li value="28">
         <span>
           This Agreement contains the entire agreement between the parties. All
           understandings have been included in this Agreement. Representations
@@ -320,7 +368,7 @@ function TermsContainer() {
           <br />
         </span>
       </li>
-      <li value="24">
+      <li value="29">
         <span>
           This Agreement and the terms and conditions contained in this
           Agreement apply to and are binding upon the Vendor&apos;s successors
@@ -330,13 +378,13 @@ function TermsContainer() {
           <br />
         </span>
       </li>
-      <li>
-        <span>Notices</span>
-        <span>
-          <br />
-        </span>
-      </li>
-      <li value="25">
+
+      <strong>Notices</strong>
+      <span>
+        <br />
+      </span>
+
+      <li value="30">
         <span>
           All notices to the Vendor under this Agreement are to be provided at
           the following address:
