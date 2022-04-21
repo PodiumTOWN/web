@@ -1802,9 +1802,7 @@ textarea.w-select {
   background-color: #c8c8c8;
   color: white;
 }
-.w-nav[data-collapse='all'] .w-nav-menu {
-  display: none;
-}
+
 .w-nav[data-collapse='all'] .w-nav-button {
   display: block;
 }
@@ -1818,17 +1816,11 @@ textarea.w-select {
   position: static;
 }
 @media screen and (max-width: 991px) {
-  .w-nav[data-collapse='medium'] .w-nav-menu {
-    display: none;
-  }
   .w-nav[data-collapse='medium'] .w-nav-button {
     display: block;
   }
 }
 @media screen and (max-width: 767px) {
-  .w-nav[data-collapse='small'] .w-nav-menu {
-    display: none;
-  }
   .w-nav[data-collapse='small'] .w-nav-button {
     display: block;
   }
@@ -1837,9 +1829,6 @@ textarea.w-select {
   }
 }
 @media screen and (max-width: 479px) {
-  .w-nav[data-collapse='tiny'] .w-nav-menu {
-    display: none;
-  }
   .w-nav[data-collapse='tiny'] .w-nav-button {
     display: block;
   }
