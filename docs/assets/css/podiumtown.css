@@ -3154,7 +3154,7 @@ figcaption {
   }
 
   .navigation-item {
-    padding: 15px 30px;
+    padding: 15px;
     -webkit-transition: background-color 400ms ease, opacity 400ms ease,
       color 400ms ease;
     transition: background-color 400ms ease, opacity 400ms ease,
