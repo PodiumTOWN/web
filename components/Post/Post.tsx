@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import dayjs from 'dayjs'
+import { useRouter } from 'next/router'
 
 interface IPost {
   post: any
@@ -8,44 +9,66 @@ interface IPost {
 }
 
 export default function Post({ post, variant = 'base' }: IPost) {
+  const router = useRouter()
+
+  if (!post) {
+    return null
+  }
+
+  const onNavigatePost = (e) => {
+    router.push(`/post/${post.post.id}`)
+    e.stopPropagation()
+  }
+
+  const onNavigateProfile = (e) => {
+    router.push(`/${post.profile.username}`)
+    e.stopPropagation()
+  }
+
   return (
-    <Link href={`post/${post.post.id}`}>
-      <div className="flex w-full p-5 border-b-[1px] transition ease-in-out hover:bg-gray-100">
-        <div className="h-[52px] min-w-[52px] relative overflow-hidden mr-3 rounded-full">
-          <Image
-            alt="Home"
-            src={post.profile.avatarUrl || '/dummy-avatar.png'}
-            fill
-            style={{ objectFit: 'cover' }}
-          />
-        </div>
-        <div className="w-full">
-          <div className="flex justify-between">
-            <div className="font-semibold hover:underline">{post.profile.username}</div>
-            <div className="flex items-center gap-2">
-              <div>
-                <Image alt="More" src="/icons/more.svg" height={20} width={20} />
-              </div>
-              <div className="text-gray-400">
-                {dayjs().to(dayjs(post.post.createdAt * 1000))}
-              </div>
+    <div
+      onClick={onNavigatePost}
+      className="flex w-full p-5 border-b-[1px] transition ease-in-out md:hover:bg-gray-100 cursor-pointer"
+    >
+      <div
+        onClick={onNavigateProfile}
+        className="h-[52px] min-w-[52px] relative overflow-hidden mr-3 rounded-full"
+      >
+        <Image
+          alt="Home"
+          src={post.profile.avatarUrl || '/dummy-avatar.png'}
+          fill
+          style={{ objectFit: 'cover' }}
+        />
+      </div>
+      <div className="w-full">
+        <div className="flex justify-between">
+          <div onClick={onNavigateProfile} className="font-semibold hover:underline">
+            {post.profile.username}
+          </div>
+          <div className="flex items-center gap-2 text-sm">
+            <div>
+              <Image alt="More" src="/icons/more.svg" height={20} width={20} />
+            </div>
+            <div className="text-gray-400">
+              {dayjs().to(dayjs(post.post.createdAt * 1000))}
             </div>
           </div>
-          <div className={`${variant === 'big' ? 'text-2xl' : 'text-base'}`}>
-            {post.post.text}
-          </div>
-          <div className="flex -mx-1 mt-1">
-            {post.post.images.map((image: any) => (
-              <div
-                key={image.id}
-                className="flex-1 relative h-[250px] overflow-hidden rounded-xl mx-1"
-              >
-                <Image alt="More" src={image.url} fill style={{ objectFit: 'cover' }} />
-              </div>
-            ))}
-          </div>
+        </div>
+        <div className={`${variant === 'big' ? 'text-2xl' : 'text-base'}`}>
+          {post.post.text}
+        </div>
+        <div className="flex -mx-1 mt-1">
+          {post.post.images.map((image: any) => (
+            <div
+              key={image.id}
+              className="flex-1 relative h-[250px] overflow-hidden rounded-xl mx-1"
+            >
+              <Image alt="More" src={image.url} fill style={{ objectFit: 'cover' }} />
+            </div>
+          ))}
         </div>
       </div>
-    </Link>
+    </div>
   )
 }

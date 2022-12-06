@@ -6,21 +6,8 @@ import unique from '../../../utils/unique'
 
 export default async function handler(req: any, res: any) {
   const { postId } = req.query
-  const app = initializeApp({
-    apiKey: process.env.API_KEY,
-    authDomain: process.env.AUTH_DOMAIN,
-    databaseURL: process.env.DATABASE_URL,
-    projectId: process.env.PROJECT_ID,
-    storageBucket: process.env.STORAGE_BUCKET,
-    messagingSenderId: process.env.MESSAGING_SENDER_ID,
-    appId: process.env.APP_ID,
-    measurementId: process.env.MEASUREMENT_ID
-  })
-
-  const db = getFirestore(app)
-  const auth = getAuth()
-  const storage = getStorage(app)
-
+  const db = getFirestore()
+  const storage = getStorage()
   const docRef = query(collection(db, 'comments'), where('postId', '==', postId))
   const docSnap = await getDocs(docRef)
   const data = docSnap.docs

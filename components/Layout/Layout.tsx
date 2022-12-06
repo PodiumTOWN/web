@@ -1,17 +1,17 @@
 import { PropsWithChildren } from 'react'
-import { DBContextProvider } from '../../contexts/DBContext/DBContext'
+import { AuthContextProvider } from '../../contexts/AuthContext/AuthContext'
 import { PostsContextProvider } from '../../contexts/PostsContext/PostsContext'
 import Sidebar from '../Sidebar/Sidebar'
 
 export default function Layout({ children }: PropsWithChildren) {
   return (
-    <DBContextProvider>
+    <AuthContextProvider>
       <PostsContextProvider>
         <div className="flex flex-col md:flex-row">
           <Sidebar />
-          {children}
+          <div className="w-full">{children}</div>
         </div>
       </PostsContextProvider>
-    </DBContextProvider>
+    </AuthContextProvider>
   )
 }
