@@ -1,9 +1,9 @@
 import Image from 'next/image'
 
-export default function Explore() {
+function ExplorePage() {
   return (
     <div className="px-6 md:p-12 flex flex-col gap-6">
-      <div className="">
+      <div>
         <input
           placeholder="Search..."
           type="text"
@@ -55,3 +55,5 @@ export default function Explore() {
     </div>
   )
 }
+
+export default ExplorePage

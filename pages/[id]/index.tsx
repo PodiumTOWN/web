@@ -1,67 +1,26 @@
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  getFirestore,
-  orderBy,
-  query,
-  where
-} from 'firebase/firestore'
-import { getDownloadURL, getStorage, ref } from 'firebase/storage'
 import Head from 'next/head'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Post from '../../components/Post/Post'
-import { AuthContext } from '../../contexts/AuthContext/AuthContext'
+import { getProfileByUsername, IProfile } from '../../lib/profile'
+import { getPosts, IPostProfile } from '../../lib/posts'
 
 function Profile() {
   const router = useRouter()
-  const { auth, logOut } = useContext(AuthContext)
   const { id } = router.query
-  const [profile, setProfile] = useState(null)
-  const [posts, setPosts] = useState([])
-
-  const onLogout = () => {
-    logOut()
-    router.push('/login')
-  }
+  const [profile, setProfile] = useState<IProfile | null>(null)
+  const [posts, setPosts] = useState<IPostProfile[]>([])
 
   useEffect(() => {
-    const getData = async () => {
-      const db = getFirestore()
-      const storage = getStorage()
-      const q = await query(collection(db, 'users'), where('username', '==', id))
-
-      const dataDoc = await getDocs(q)
-      let data = await dataDoc.docs[0].data()
-      let profile
-      if (data?.avatarId) {
-        const starsRef = ref(storage, `${data.id}/${data.avatarId}.png`)
-        const avatarUrl = await getDownloadURL(starsRef)
-        profile = {
-          ...data,
-          avatarUrl
-        }
-        setProfile(profile)
-      } else {
-        profile = data
-        setProfile(data)
-      }
-
-      const docRefPosts = query(
-        collection(db, 'posts'),
-        where('ownerId', '==', data.id),
-        orderBy('createdAt', 'desc')
-      )
-      const docSnap = await getDocs(docRefPosts)
-      const dataPosts = docSnap.docs
-      let postData = dataPosts.map((doc) => doc.data())
-      setPosts(postData.map((post) => ({ post, profile })))
+    const getData = async (id: string) => {
+      const profile = await getProfileByUsername(id)
+      setProfile(profile)
+      const posts = await getPosts(profile.id)
+      setPosts(posts)
     }
     if (id) {
-      getData()
+      getData(id as string)
     }
   }, [id])
 
@@ -85,14 +44,6 @@ function Profile() {
             </div>
             <div className="text-xl font-medium">{profile?.username}</div>
           </div>
-          {auth.currentUser?.uid == profile?.id && (
-            <button
-              onClick={onLogout}
-              className="py-2 px-4 bg-gray-100 font-medium rounded-lg"
-            >
-              Logout
-            </button>
-          )}
         </div>
 
         <div>

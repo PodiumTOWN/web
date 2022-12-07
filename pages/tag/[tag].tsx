@@ -1,66 +1,25 @@
-import {
-  collection,
-  getDocs,
-  getFirestore,
-  orderBy,
-  query,
-  where
-} from 'firebase/firestore'
-import { getDownloadURL, getStorage, ref } from 'firebase/storage'
 import Head from 'next/head'
-import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Post from '../../components/Post/Post'
-import unique from '../../utils/unique'
+import { getPostsForHashtag, IPostProfile } from '../../lib/posts'
+import Image from 'next/image'
 
-function Path() {
-  const [posts, setPosts] = useState([])
+function TagPage() {
+  const [posts, setPosts] = useState<IPostProfile[]>([])
+  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const { tag } = router.query
 
   useEffect(() => {
     const getData = async () => {
-      const db = getFirestore()
-      const storage = getStorage()
-      const docRef = query(
-        collection(db, 'posts'),
-        where('hashtags', 'array-contains', `#${tag}`),
-        orderBy('createdAt', 'desc')
-      )
-      const docSnap = await getDocs(docRef)
-      const data = docSnap.docs
-      let postData = data.map((doc) => doc.data())
-      if (postData.length) {
-        let uniqueProfileIds = postData.map((p) => p.ownerId).filter(unique)
-        let profiles = query(collection(db, 'users'), where('id', 'in', uniqueProfileIds))
-        let s = await getDocs(profiles)
-        let profiless = await Promise.all(
-          s.docs.map(async (p) => {
-            const data = p.data()
-            if (data.avatarId) {
-              const starsRef = ref(storage, `${data.id}/${data.avatarId}.png`)
-              const avatarUrl = await getDownloadURL(starsRef)
-              return {
-                ...data,
-                avatarUrl
-              }
-            }
-            return data
-          })
-        )
-        let final = postData.map((pd) => {
-          let profile = profiless.find((it) => it.id == pd.ownerId)
-          return {
-            post: pd,
-            profile
-          }
-        })
-        setPosts(final)
-      }
+      setIsLoading(true)
+      const result = await getPostsForHashtag(`#${tag}`)
+      setPosts(result)
+      setIsLoading(false)
     }
     getData()
-  }, [])
+  }, [tag])
 
   return (
     <>
@@ -70,6 +29,11 @@ function Path() {
       </Head>
 
       <div className="w-full md:max-w-2xl md:border-r-[1px] h-full">
+        {isLoading && (
+          <div className="flex justify-center py-8 w-full">
+            <Image src="/icons/loading.svg" alt="Back" width={32} height={32} />
+          </div>
+        )}
         {posts?.map((post: any) => (
           <Post key={post.post.id} post={post} />
         ))}
@@ -78,4 +42,4 @@ function Path() {
   )
 }
 
-export default Path
+export default TagPage

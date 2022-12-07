@@ -1,15 +1,15 @@
-import { getAuth, RecaptchaVerifier } from 'firebase/auth'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import { AuthContext } from '../../contexts/AuthContext/AuthContext'
 import SignIn from '../SignIn/SignIn'
 
+interface ISidebar {
+  isAuthenticated: boolean
+}
+
 export default function Sidebar() {
-  const auth = getAuth()
-  const { user, logIn } = useContext(AuthContext)
-  const router = useRouter()
+  const { isAuthenticated } = useContext(AuthContext)
 
   return (
     <div className="flex flex-col justify-between bg-white md:h-screen sticky top-0 md:border-r-[1px] z-20 md:w-1/3 md:min-w-[310px] md:max-w-sm">
@@ -18,7 +18,7 @@ export default function Sidebar() {
           <Image alt="Home" src="/logo.svg" height={30} width={30} className="pl-1" />
         </Link>
 
-        {user ? (
+        {isAuthenticated ? (
           <ul className="md:px-12 py-4 md:py-6 flex flex-row md:flex-col gap-2">
             <li>
               <Link

@@ -1,31 +1,47 @@
 import { getAuth, RecaptchaVerifier } from 'firebase/auth'
-import { useContext, useEffect, useMemo, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import { Modal, Button, Spinner, TextInput } from 'flowbite-react'
 import { AuthContext } from '../../contexts/AuthContext/AuthContext'
 
 export default function SignIn() {
+  const [isLoading, setIsLoading] = useState(false)
   const [step, setStep] = useState(1)
   const [phoneNumber, setPhoneNumber] = useState('')
   const [code, setCode] = useState('')
+  const [isModalVisible, setIsModalVisible] = useState(false)
   const auth = getAuth()
-  const { verifyPhone, verifyCode } = useContext(AuthContext)
+  const { verifyPhoneNumber, verifyCode } = useContext(AuthContext)
 
   useEffect(() => {
-    window.recaptchaVerifier = new RecaptchaVerifier(
+    ;(window as any).recaptchaVerifier = new RecaptchaVerifier(
       'sign-in-button',
       {
-        size: 'invisible'
+        size: 'invisible',
+        callback: () => {
+          setIsLoading(false)
+          setStep(2)
+        }
       },
       auth
     )
   }, [auth])
 
   const onVerifyPhone = () => {
-    setStep(2)
-    verifyPhone(phoneNumber)
+    setIsLoading(true)
+    verifyPhoneNumber(phoneNumber)
   }
 
   const onVerifyCode = () => {
+    setIsLoading(true)
     verifyCode(code)
+  }
+
+  const onShowModal = () => {
+    setIsModalVisible(true)
+  }
+
+  const onCloseModal = () => {
+    setIsModalVisible(false)
   }
 
   const Steps = () => {
@@ -33,40 +49,54 @@ export default function SignIn() {
       case 1:
         return (
           <>
-            <input
+            <TextInput
+              color="primary"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
-              placeholder="Phone number"
-              className="p-2 bg-gray-100 w-full rounded-xl border-2 focus:border-black border-transparent outline-none"
               type="tel"
+              placeholder="Phone number"
+              required={true}
             />
-            <button
+            <Button
+              disabled={isLoading || phoneNumber.length < 5}
               id="sign-in-button"
+              color="primary"
               onClick={onVerifyPhone}
-              className="py-3 px-4 bg-gray-900 text-white rounded-xl"
             >
-              Sign In
-            </button>
+              {isLoading && (
+                <div className="mr-3">
+                  <Spinner color="primary" size="sm" />
+                </div>
+              )}
+              Sign in
+            </Button>
           </>
         )
 
       case 2:
         return (
           <>
-            <input
+            <TextInput
+              color="primary"
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              placeholder="Verification Code"
-              className="p-2 bg-gray-100 w-full rounded-xl border-2 focus:border-black border-transparent outline-none"
-              type="text"
+              type="number"
+              placeholder="Verification code"
+              required={true}
             />
-            <button
+            <Button
+              disabled={isLoading || code.length !== 6}
               id="sign-in-button"
+              color="primary"
               onClick={onVerifyCode}
-              className="py-3 px-4 bg-gray-900 text-white rounded-xl"
             >
-              Sign In
-            </button>
+              {isLoading && (
+                <div className="mr-3">
+                  <Spinner color="primary" size="sm" />
+                </div>
+              )}
+              Sign in
+            </Button>
           </>
         )
 
@@ -75,5 +105,20 @@ export default function SignIn() {
     }
   }
 
-  return <div className="md:px-16 py-4 md:py-6 flex flex-col gap-4">{Steps()}</div>
+  return (
+    <div className="md:px-16 py-4 md:py-6">
+      <div className="hidden md:flex md:flex-col md:gap-4">{Steps()}</div>
+      <div className="flex md:hidden">
+        <Button color="primary" onClick={onShowModal}>
+          Sign in
+        </Button>
+      </div>
+      <Modal show={isModalVisible} onClose={onCloseModal}>
+        <Modal.Header>Sign In</Modal.Header>
+        <Modal.Body>
+          <div className="space-y-6">{Steps()}</div>
+        </Modal.Body>
+      </Modal>
+    </div>
+  )
 }

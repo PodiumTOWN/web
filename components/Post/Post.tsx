@@ -1,7 +1,7 @@
 import Image from 'next/image'
-import Link from 'next/link'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
+import { MouseEvent } from 'react'
 
 interface IPost {
   post: any
@@ -15,12 +15,12 @@ export default function Post({ post, variant = 'base' }: IPost) {
     return null
   }
 
-  const onNavigatePost = (e) => {
+  const onNavigatePost = (e: MouseEvent<HTMLElement>) => {
     router.push(`/post/${post.post.id}`)
     e.stopPropagation()
   }
 
-  const onNavigateProfile = (e) => {
+  const onNavigateProfile = (e: MouseEvent<HTMLElement>) => {
     router.push(`/${post.profile.username}`)
     e.stopPropagation()
   }
@@ -38,7 +38,7 @@ export default function Post({ post, variant = 'base' }: IPost) {
           alt="Home"
           src={post.profile.avatarUrl || '/dummy-avatar.png'}
           fill
-          style={{ objectFit: 'cover' }}
+          className="object-cover"
         />
       </div>
       <div className="w-full">

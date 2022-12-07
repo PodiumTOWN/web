@@ -1,15 +1,27 @@
 import '../styles/globals.scss'
 import type { AppProps } from 'next/app'
-import Layout from '../components/Layout/Layout'
+import { Flowbite } from 'flowbite-react'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import { AuthProvider } from '../contexts/AuthContext/AuthContext'
+import { PostsContextProvider } from '../contexts/PostsContext/PostsContext'
+import Layout from '../components/Layout/Layout'
+import theme from '../utils/theme'
 
 dayjs.extend(relativeTime)
 
-export default function App({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }: AppProps) {
   return (
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
+    <AuthProvider>
+      <PostsContextProvider>
+        <Flowbite theme={theme}>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </Flowbite>
+      </PostsContextProvider>
+    </AuthProvider>
   )
 }
+
+export default App

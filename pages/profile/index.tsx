@@ -1,24 +1,22 @@
+import { Button } from 'flowbite-react'
 import Head from 'next/head'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import Post from '../../components/Post/Post'
 import { AuthContext } from '../../contexts/AuthContext/AuthContext'
+import { PostsContext } from '../../contexts/PostsContext/PostsContext'
 
 function Profile() {
+  const { logOut, profile } = useContext(AuthContext)
+  const { profilePosts, setPosts } = useContext(PostsContext)
   const router = useRouter()
-  const { auth, logOut, user, userPosts } = useContext(AuthContext)
 
   const onLogout = () => {
     logOut()
+    setPosts([])
     router.push('/')
   }
-
-  useEffect(() => {
-    if (!user) {
-      router.push('/')
-    }
-  }, [user, router])
 
   return (
     <>
@@ -31,20 +29,17 @@ function Profile() {
         <div className="flex items-center gap-4 justify-between p-6">
           <div className="flex items-center gap-4">
             <div className="h-24 w-24 overflow-hidden relative">
-              <Image src={user?.avatarUrl || '/dummy-avatar.png'} fill alt="Avatar" />
+              <Image src={profile?.avatarUrl || '/dummy-avatar.png'} fill alt="Avatar" />
             </div>
-            <div className="text-xl font-medium">{user?.username}</div>
+            <div className="text-xl font-medium">{profile?.username}</div>
           </div>
-          <button
-            onClick={onLogout}
-            className="py-2 px-4 bg-gray-100 font-medium rounded-lg"
-          >
+          <Button onClick={onLogout} color="secondary">
             Logout
-          </button>
+          </Button>
         </div>
 
         <div>
-          {userPosts.map((post) => (
+          {profilePosts?.map((post) => (
             <Post key={post.post.id} post={post} />
           ))}
         </div>
