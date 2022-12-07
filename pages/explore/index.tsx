@@ -19,13 +19,13 @@ function ExplorePage() {
       <div className="flex flex-col gap-2">
         <div className="text-md font-medium">🌎 Global trends</div>
         <div className="flex gap-2">
-          <div className="bg-gray-100 px-3 py-2 rounded-full text-sm font-medium">
+          <div className="bg-gray-100 dark:bg-zinc-900 px-3 py-2 rounded-full text-sm font-medium">
             #welcome
           </div>
-          <div className="bg-gray-100 px-3 py-2 rounded-full text-sm font-medium">
+          <div className="bg-gray-100 dark:bg-zinc-900 px-3 py-2 rounded-full text-sm font-medium">
             #welcome
           </div>
-          <div className="bg-gray-100 px-3 py-2 rounded-full text-sm font-medium">
+          <div className="bg-gray-100 dark:bg-zinc-900 px-3 py-2 rounded-full text-sm font-medium">
             #welcome
           </div>
         </div>
@@ -37,7 +37,7 @@ function ExplorePage() {
           <div className="text-gray-400 text-sm">How does it work ?</div>
         </div>
         <div className="flex gap-2">
-          <div className="bg-gray-100 p-4 rounded-xl text-sm font-medium w-full flex justify-between">
+          <div className="bg-gray-100 dark:bg-zinc-900 p-4 rounded-xl text-sm font-medium w-full flex justify-between">
             <div>Ban profile @bot123</div>
             <div className="flex gap-3">
               <div className="flex items-center gap-1">

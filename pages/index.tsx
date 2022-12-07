@@ -20,7 +20,7 @@ function HomePage() {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
-      <div className="w-full md:max-w-2xl md:border-r-[1px] h-full">
+      <div className="w-full md:max-w-2xl md:border-r-[1px] h-full dark:md:border-r-zinc-800">
         {!posts && <Loading />}
         {posts?.map((post) => (
           <Post key={post.post.id} post={post} />

@@ -2,6 +2,7 @@ import Image from 'next/image'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { MouseEvent } from 'react'
+import MoreSVG from '../../public/icons/more.svg'
 
 interface IPost {
   post: any
@@ -28,7 +29,7 @@ export default function Post({ post, variant = 'base' }: IPost) {
   return (
     <div
       onClick={onNavigatePost}
-      className="flex w-full p-5 border-b-[1px] transition ease-in-out md:hover:bg-gray-100 cursor-pointer"
+      className="flex w-full p-5 border-b-[1px] dark:border-b-zinc-800 transition ease-in-out md:hover:bg-gray-100 md:dark:hover:bg-zinc-900 cursor-pointer"
     >
       <div
         onClick={onNavigateProfile}
@@ -47,8 +48,8 @@ export default function Post({ post, variant = 'base' }: IPost) {
             {post.profile.username}
           </div>
           <div className="flex items-center gap-2 text-sm">
-            <div>
-              <Image alt="More" src="/icons/more.svg" height={20} width={20} />
+            <div className="text-gray-400">
+              <MoreSVG className="w-4 h-4" />
             </div>
             <div className="text-gray-400">
               {dayjs().to(dayjs(post.post.createdAt * 1000))}

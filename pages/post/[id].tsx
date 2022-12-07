@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from 'react'
 import Post from '../../components/Post/Post'
 import { PostsContext } from '../../contexts/PostsContext/PostsContext'
 import { getPost } from '../../lib/posts'
+import BackSVG from '../../public/icons/arrow-left.svg'
 
 function PostPage() {
   const [isLoading, setIsLoading] = useState(false)
@@ -45,10 +46,10 @@ function PostPage() {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
-      <div className="w-full md:max-w-2xl md:border-r-[1px] h-full">
+      <div className="w-full md:max-w-2xl md:border-r-[1px] dark:border-zinc-800 h-full">
         <div className="py-2 px-4">
-          <div className="cursor-pointer" onClick={() => router.back()}>
-            <Image src="/icons/arrow-left.svg" alt="Back" width={32} height={32} />
+          <div className="cursor-pointer w-8 h-8" onClick={() => router.back()}>
+            <BackSVG className="w-full" />
           </div>
         </div>
         <Post post={post} variant="big" />

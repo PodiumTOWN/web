@@ -31,7 +31,7 @@ function Profile() {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
-      <div className="flex flex-col gap-6 w-full md:max-w-2xl md:border-r-[1px] h-full">
+      <div className="flex flex-col gap-6 w-full md:max-w-2xl md:border-r-[1px] h-full dark:md:border-r-zinc-800">
         <div className="flex items-center gap-4 justify-between p-6">
           <div className="flex items-center gap-4">
             <div className="h-24 w-24 overflow-hidden relative rounded-full">
