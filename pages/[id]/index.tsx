@@ -32,6 +32,12 @@ function Profile() {
       <Head>
         <title>Podium — {id}</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <meta name="description" content={`${id} on Podium`} />
+        <meta property="og:description" content={`${id} on Podium`} key="ogdesc" />
+        <meta property="og:url" content={`https://podium.town/${id}`} key="ogurl" />
+        <meta property="og:image" content="https://podium.town/logo.png" key="ogimage" />
+        <meta property="og:site_name" content={`${id} on Podium`} key="ogsitename" />
+        <meta property="og:title" content={`${id} on Podium`} key="ogtitle" />
       </Head>
 
       <div className="flex flex-col gap-6 w-full md:max-w-2xl md:border-r-[1px] h-full dark:md:border-r-zinc-800">
