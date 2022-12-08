@@ -27,7 +27,7 @@ const PostsContext = createContext<IPostsContext>({
 })
 
 const PostsContextProvider = ({ children }: React.PropsWithChildren<any>) => {
-  const { profile } = useContext(AuthContext)
+  const { profile, isLoading } = useContext(AuthContext)
   const [posts, setPosts] = useState<null | IPostProfile[]>(null)
   const [profilePosts, setProfilePosts] = useState<null | IPostProfile[]>(null)
 
@@ -43,8 +43,10 @@ const PostsContextProvider = ({ children }: React.PropsWithChildren<any>) => {
         setPosts(posts)
       }
     }
-    getData()
-  }, [profile])
+    if (!isLoading) {
+      getData()
+    }
+  }, [profile, isLoading])
 
   return (
     <PostsContext.Provider value={{ posts, profilePosts, setPosts }}>

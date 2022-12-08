@@ -53,7 +53,7 @@ export default function SignIn() {
               color="primary"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
-              type="tel"
+              type="text"
               placeholder="Phone number"
               required={true}
             />

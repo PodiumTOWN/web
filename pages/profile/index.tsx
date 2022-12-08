@@ -29,7 +29,12 @@ function Profile() {
         <div className="flex items-center gap-4 justify-between p-6">
           <div className="flex items-center gap-4">
             <div className="h-24 w-24 overflow-hidden relative rounded-full">
-              <Image src={profile?.avatarUrl || '/dummy-avatar.png'} fill alt="Avatar" />
+              <Image
+                src={profile?.avatarUrl || '/dummy-avatar.png'}
+                fill
+                alt="Avatar"
+                className="object-cover"
+              />
             </div>
             <div className="text-xl font-medium">{profile?.username}</div>
           </div>
