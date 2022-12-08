@@ -4,8 +4,7 @@ import {
   ConfirmationResult,
   getAuth,
   signInWithPhoneNumber,
-  signOut,
-  User
+  signOut
 } from 'firebase/auth'
 import { app } from '../../firebase/firebaseClient'
 import { getProfile, IProfile } from '../../lib/profile'
@@ -17,6 +16,7 @@ interface IAuthContext {
   logOut: () => void
   verifyPhoneNumber: (phoneNumber: string) => void
   verifyCode: (code: string) => void
+  isLoading: boolean
 }
 
 export const AuthContext = createContext<IAuthContext>({
@@ -24,7 +24,8 @@ export const AuthContext = createContext<IAuthContext>({
   profile: null,
   logOut: () => {},
   verifyPhoneNumber: () => {},
-  verifyCode: () => {}
+  verifyCode: () => {},
+  isLoading: true
 })
 
 export function AuthProvider({ children }: any) {
@@ -93,16 +94,11 @@ export function AuthProvider({ children }: any) {
         logOut,
         profile,
         verifyPhoneNumber,
-        verifyCode
+        verifyCode,
+        isLoading
       }}
     >
-      {isLoading ? (
-        <div className="flex justify-center items-center" style={{ height: '100vh' }}>
-          <Image src="/logo.svg" width={32} height={32} alt="Loading" />
-        </div>
-      ) : (
-        children
-      )}
+      {children}
     </AuthContext.Provider>
   )
 }
