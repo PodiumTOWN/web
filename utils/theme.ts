@@ -26,7 +26,7 @@ const theme: ThemeProps = {
     modal: {
       base: 'h-screen fixed top-0 z-50 w-full flex',
       show: {
-        on: 'bg-gray-600 dark:bg-opacity-80 dark:bg-zinc-900 bg-opacity-80 h-full'
+        on: 'bg-gray-600 dark:bg-opacity-80 dark:bg-black bg-opacity-80 h-full'
       },
       content: {
         inner: 'bg-white dark:bg-black'
