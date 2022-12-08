@@ -33,9 +33,10 @@ export default function Post({ post, variant = 'base' }: IPost) {
     >
       <div
         onClick={onNavigateProfile}
-        className="h-[52px] min-w-[52px] relative overflow-hidden mr-3 rounded-full"
+        className="h-[52px] min-w-[52px] relative overflow-hidden mr-3 rounded-full bg-gray-100 dark:bg-zinc-900"
       >
         <Image
+          priority
           alt="Avatar"
           src={post.profile.avatarUrl || '/dummy-avatar.png'}
           fill
@@ -63,9 +64,15 @@ export default function Post({ post, variant = 'base' }: IPost) {
           {post.post.images.map((image: any) => (
             <div
               key={image.id}
-              className="flex-1 relative h-[250px] overflow-hidden rounded-xl mx-1"
+              className="flex-1 relative h-[250px] overflow-hidden rounded-xl mx-1 bg-gray-100 dark:bg-zinc-900"
             >
-              <Image alt="Image" src={image.url} fill style={{ objectFit: 'cover' }} />
+              <Image
+                alt="Image"
+                src={image.url}
+                fill
+                style={{ objectFit: 'cover' }}
+                priority
+              />
             </div>
           ))}
         </div>

@@ -1,37 +1,38 @@
+import { GetServerSidePropsContext } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Post from '../../components/Post/Post'
-import { PostsContext } from '../../contexts/PostsContext/PostsContext'
 import { getComments } from '../../lib/comments'
-import { getPost } from '../../lib/posts'
+import { getPostMinimum, IPost } from '../../lib/posts'
+import { getProfile, IProfile } from '../../lib/profile'
 import BackSVG from '../../public/icons/arrow-left.svg'
 import LoadingSVG from '../../public/icons/loading.svg'
 
-function PostPage() {
+interface IPostPage {
+  post: IPost
+}
+
+function PostPage({ post }: IPostPage) {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
-  const { id } = router.query
-  const { posts } = useContext(PostsContext)
   const [comments, setComments] = useState<any[] | null>(null)
-  const found = posts?.find((p) => p.post.id === id)
-  const [post, setPost] = useState(found)
+  const [profile, setProfile] = useState<IProfile | null>(null)
+  const title = profile ? `Podium — Post by ${profile.username}` : 'Podium — Post'
 
   useEffect(() => {
-    const getData = async (id: string) => {
+    const getData = async () => {
       setIsLoading(true)
-      if (!post) {
-        const result = await getPost(id)
-        setPost(result)
-      }
-      const comments = await getComments(id)
+      const result = await getProfile(post.ownerId)
+      setProfile(result)
+
+      const comments = await getComments(post.id)
       setComments(comments)
       setIsLoading(false)
     }
-    if (id) {
-      getData(id as string)
-    }
-  }, [id, post])
+
+    getData()
+  }, [post])
 
   const Loading = () => (
     <div className="flex justify-center py-8 w-full">
@@ -42,8 +43,22 @@ function PostPage() {
   return (
     <>
       <Head>
-        <title>Podium — Post by {post?.profile.username}</title>
+        <title>{title}</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <meta name="description" content={`${post.text}`} />
+        <meta property="og:description" content={`${post.text}`} key="ogdesc" />
+        <meta
+          property="og:url"
+          content={`https://podium.town/post/${post.id}`}
+          key="ogurl"
+        />
+        <meta property="og:image" content="https://podium.town/logo.png" key="ogimage" />
+        <meta
+          property="og:site_name"
+          content="Podium — Open social network"
+          key="ogsitename"
+        />
+        <meta property="og:title" content={`${title}`} key="ogtitle" />
       </Head>
 
       <div className="w-full md:max-w-2xl md:border-r-[1px] dark:border-zinc-800 h-full">
@@ -52,7 +67,7 @@ function PostPage() {
             <BackSVG className="w-full" />
           </div>
         </div>
-        <Post post={post} variant="big" />
+        {profile && <Post post={{ post, profile }} variant="big" />}
         {isLoading ? (
           <Loading />
         ) : (
@@ -61,6 +76,17 @@ function PostPage() {
       </div>
     </>
   )
+}
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const id = context.params?.id
+  const post = await getPostMinimum(id as string)
+
+  return {
+    props: {
+      post
+    }
+  }
 }
 
 export default PostPage

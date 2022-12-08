@@ -56,12 +56,13 @@ function ProfilePage({ username }: IProfilePage) {
           <>
             <div className="flex items-center gap-4 justify-between p-6">
               <div className="flex items-center gap-4">
-                <div className="h-24 w-24 overflow-hidden relative rounded-full">
+                <div className="h-24 w-24 overflow-hidden relative rounded-full bg-gray-100 dark:bg-zinc-900">
                   <Image
                     src={profile?.avatarUrl || '/dummy-avatar.png'}
                     fill
                     alt="Avatar"
                     className="object-cover"
+                    priority
                   />
                 </div>
                 <div className="text-xl font-medium">{profile?.username}</div>
@@ -81,9 +82,11 @@ function ProfilePage({ username }: IProfilePage) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const username = context.params?.id
+
   return {
     props: {
-      username: context.params?.id
+      username
     }
   }
 }

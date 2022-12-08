@@ -4,6 +4,7 @@ import {
   getDoc,
   getDocs,
   getFirestore,
+  limit,
   orderBy,
   query,
   where
@@ -22,11 +23,20 @@ export interface IPostProfile {
   profile: IProfile
 }
 
+export async function getPostMinimum(id: string) {
+  const db = getFirestore()
+  const reference = doc(db, 'posts', id)
+  const document = await getDoc(reference)
+  const data = document.data() as IPost
+  return data
+}
+
 export async function getPosts(profileId: string): Promise<IPostProfile[]> {
   const db = getFirestore()
   const postsQuery = query(
     collection(db, 'posts'),
     where('ownerId', '==', profileId),
+    limit(25),
     orderBy('createdAt', 'desc')
   )
   const documents = await getDocs(postsQuery)
@@ -48,6 +58,7 @@ export async function getPostsWithProfile(profile: IProfile): Promise<IPostProfi
   const postsQuery = query(
     collection(db, 'posts'),
     where('ownerId', '==', profile.id),
+    limit(25),
     orderBy('createdAt', 'desc')
   )
   const documents = await getDocs(postsQuery)
@@ -68,6 +79,7 @@ export async function getPostsForProfile(
   const postsQuery = query(
     collection(db, 'posts'),
     where('ownerId', 'in', followingIds),
+    limit(25),
     orderBy('createdAt', 'desc')
   )
   const documents = await getDocs(postsQuery)
@@ -89,11 +101,11 @@ export async function getPostsForHashtag(hashtag: string): Promise<IPostProfile[
   const postsQuery = query(
     collection(db, 'posts'),
     where('hashtags', 'array-contains', hashtag),
+    limit(25),
     orderBy('createdAt', 'desc')
   )
   const documents = await getDocs(postsQuery)
   const data = documents.docs.map((d) => d.data() as IPost)
-
   const uniqueProfileIds = data.map((d) => d.ownerId).filter(unique)
   const profiles = await getProfiles(uniqueProfileIds)
 
