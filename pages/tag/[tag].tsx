@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Post from '../../components/Post/Post'
 import { getPostsForHashtag, IPostProfile } from '../../lib/posts'
 import Image from 'next/image'
+import LoadingSVG from '../../public/icons/loading.svg'
 
 function TagPage() {
   const [posts, setPosts] = useState<IPostProfile[]>([])
@@ -18,7 +19,9 @@ function TagPage() {
       setPosts(result)
       setIsLoading(false)
     }
-    getData()
+    if (tag) {
+      getData()
+    }
   }, [tag])
 
   return (
@@ -29,14 +32,13 @@ function TagPage() {
       </Head>
 
       <div className="w-full md:max-w-2xl md:border-r-[1px] h-full dark:md:border-r-zinc-800">
-        {isLoading && (
+        {isLoading ? (
           <div className="flex justify-center py-8 w-full">
-            <Image src="/icons/loading.svg" alt="Back" width={32} height={32} />
+            <LoadingSVG />
           </div>
+        ) : (
+          posts?.map((post: any) => <Post key={post.post.id} post={post} />)
         )}
-        {posts?.map((post: any) => (
-          <Post key={post.post.id} post={post} />
-        ))}
       </div>
     </>
   )

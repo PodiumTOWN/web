@@ -1,5 +1,4 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
 import Post from '../../components/Post/Post'
@@ -7,6 +6,7 @@ import { PostsContext } from '../../contexts/PostsContext/PostsContext'
 import { getComments } from '../../lib/comments'
 import { getPost } from '../../lib/posts'
 import BackSVG from '../../public/icons/arrow-left.svg'
+import LoadingSVG from '../../public/icons/loading.svg'
 
 function PostPage() {
   const [isLoading, setIsLoading] = useState(false)
@@ -35,7 +35,7 @@ function PostPage() {
 
   const Loading = () => (
     <div className="flex justify-center py-8 w-full">
-      <Image src="/icons/loading.svg" alt="Back" width={32} height={32} />
+      <LoadingSVG />
     </div>
   )
 

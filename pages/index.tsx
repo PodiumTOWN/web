@@ -1,15 +1,15 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import { useContext } from 'react'
 import Post from '../components/Post/Post'
 import { PostsContext } from '../contexts/PostsContext/PostsContext'
+import LoaderSVG from '../public/icons/loading.svg'
 
 function HomePage() {
   const { posts } = useContext(PostsContext)
 
   const Loading = () => (
     <div className="flex justify-center py-8 w-full">
-      <Image src="/icons/loading.svg" alt="Back" width={32} height={32} />
+      <LoaderSVG />
     </div>
   )
 
@@ -21,10 +21,11 @@ function HomePage() {
       </Head>
 
       <div className="w-full md:max-w-2xl md:border-r-[1px] h-full dark:md:border-r-zinc-800">
-        {!posts && <Loading />}
-        {posts?.map((post) => (
-          <Post key={post.post.id} post={post} />
-        ))}
+        {posts ? (
+          posts.map((post) => <Post key={post.post.id} post={post} />)
+        ) : (
+          <Loading />
+        )}
       </div>
     </>
   )

@@ -36,7 +36,7 @@ export default function Post({ post, variant = 'base' }: IPost) {
         className="h-[52px] min-w-[52px] relative overflow-hidden mr-3 rounded-full"
       >
         <Image
-          alt="Home"
+          alt="Avatar"
           src={post.profile.avatarUrl || '/dummy-avatar.png'}
           fill
           className="object-cover"
@@ -65,7 +65,7 @@ export default function Post({ post, variant = 'base' }: IPost) {
               key={image.id}
               className="flex-1 relative h-[250px] overflow-hidden rounded-xl mx-1"
             >
-              <Image alt="More" src={image.url} fill style={{ objectFit: 'cover' }} />
+              <Image alt="Image" src={image.url} fill style={{ objectFit: 'cover' }} />
             </div>
           ))}
         </div>

@@ -8,7 +8,6 @@ import {
   query,
   where
 } from 'firebase/firestore'
-import { getStorage } from 'firebase/storage'
 import unique from '../utils/unique'
 import { getProfile, getProfiles, IProfile } from './profile'
 
@@ -108,7 +107,6 @@ export async function getPostsForHashtag(hashtag: string): Promise<IPostProfile[
 
 export async function getPost(id: string): Promise<IPostProfile> {
   const db = getFirestore()
-  const storage = getStorage()
   const reference = doc(db, 'posts', id)
   const document = await getDoc(reference)
   const data = document.data() as IPost
