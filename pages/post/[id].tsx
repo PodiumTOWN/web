@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
 import Post from '../../components/Post/Post'
 import { PostsContext } from '../../contexts/PostsContext/PostsContext'
+import { getComments } from '../../lib/comments'
 import { getPost } from '../../lib/posts'
 import BackSVG from '../../public/icons/arrow-left.svg'
 
@@ -23,9 +24,8 @@ function PostPage() {
         const result = await getPost(id)
         setPost(result)
       }
-      const comments = await fetch(`/api/comments/${id}`)
-      const result = await comments.json()
-      setComments(result)
+      const comments = await getComments(id)
+      setComments(comments)
       setIsLoading(false)
     }
     if (id) {

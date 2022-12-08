@@ -44,6 +44,24 @@ export async function getPosts(profileId: string): Promise<IPostProfile[]> {
     .filter((p) => p.profile) as IPostProfile[]
 }
 
+export async function getPostsWithProfile(profile: IProfile): Promise<IPostProfile[]> {
+  const db = getFirestore()
+  const postsQuery = query(
+    collection(db, 'posts'),
+    where('ownerId', '==', profile.id),
+    orderBy('createdAt', 'desc')
+  )
+  const documents = await getDocs(postsQuery)
+  const data = documents.docs.map((d) => d.data() as IPost)
+
+  return data
+    .map((post) => ({
+      post,
+      profile
+    }))
+    .filter((p) => p.profile) as IPostProfile[]
+}
+
 export async function getPostsForProfile(
   followingIds: string[]
 ): Promise<IPostProfile[]> {
