@@ -14,7 +14,7 @@ export default function Sidebar() {
 
   return (
     <div className="flex flex-col justify-between bg-white dark:bg-black md:h-screen sticky top-0 md:border-r-[1px] dark:border-zinc-800 z-20 md:w-1/3 md:min-w-[310px] md:max-w-sm">
-      <div className="flex flex-row md:flex-col md:justify-start justify-between pl-5 pr-2 items-center md:items-start md:pt-24">
+      <div className="min-h-[76px] flex flex-row md:flex-col md:justify-start justify-between pl-5 pr-2 items-center md:items-start md:pt-24">
         <Link href="/" className="md:pl-16 md:mb-6 text-black dark:text-white">
           <LogoSVG className="w-8 h-8" />
         </Link>

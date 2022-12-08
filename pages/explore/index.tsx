@@ -1,13 +1,17 @@
 import Image from 'next/image'
+import { TextInput } from 'flowbite-react'
+import SearchSVG from '../../public/icons/search.svg'
 
 function ExplorePage() {
   return (
     <div className="px-6 md:p-12 flex flex-col gap-6">
       <div>
-        <input
-          placeholder="Search..."
+        <TextInput
+          color="primary"
           type="text"
-          className="p-4 bg-gray-100 w-full rounded-xl border-2 focus:border-black border-transparent outline-none"
+          placeholder="Search..."
+          icon={SearchSVG}
+          sizing="lg"
         />
       </div>
 
