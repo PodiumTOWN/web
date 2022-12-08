@@ -8,43 +8,52 @@ import { GetServerSidePropsContext } from 'next'
 import LoadingSVG from '../../public/icons/loading.svg'
 
 interface IProfilePage {
-  username: string
+  profile: IProfile
 }
 
-function ProfilePage({ username }: IProfilePage) {
+function ProfilePage({ profile }: IProfilePage) {
   const [isLoading, setIsLoading] = useState(false)
-  const [profile, setProfile] = useState<IProfile | null>(null)
   const [posts, setPosts] = useState<IPostProfile[]>([])
-  const title = `Podium — ${username}`
+  const title = `Podium — ${profile.username}`
 
   useEffect(() => {
     const getData = async () => {
       setIsLoading(true)
-      const profile = await getProfileByUsername(username)
-      setIsLoading(false)
-      setProfile(profile)
       const posts = await getPostsWithProfile(profile)
       setPosts(posts)
+      setIsLoading(false)
     }
 
     getData()
-  }, [username])
+  }, [profile])
 
   return (
     <>
       <Head>
         <title>{title}</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <meta name="description" content={`${username} on Podium`} />
-        <meta property="og:description" content={`${username} on Podium`} key="ogdesc" />
-        <meta property="og:url" content={`https://podium.town/${username}`} key="ogurl" />
-        <meta property="og:image" content="https://podium.town/logo.png" key="ogimage" />
+        <meta name="description" content={`${profile.username} on Podium`} />
+        <meta
+          property="og:description"
+          content={`${profile.username} on Podium`}
+          key="ogdesc"
+        />
+        <meta
+          property="og:url"
+          content={`https://podium.town/${profile.username}`}
+          key="ogurl"
+        />
+        <meta property="og:image" content={profile.avatarUrl} key="ogimage" />
         <meta
           property="og:site_name"
-          content={`${username} on Podium`}
+          content={`${profile.username} on Podium`}
           key="ogsitename"
         />
-        <meta property="og:title" content={`${username} on Podium`} key="ogtitle" />
+        <meta
+          property="og:title"
+          content={`${profile.username} on Podium`}
+          key="ogtitle"
+        />
       </Head>
 
       <div className="flex flex-col gap-6 w-full md:max-w-2xl md:border-r-[1px] h-full dark:md:border-r-zinc-800">
@@ -81,14 +90,11 @@ function ProfilePage({ username }: IProfilePage) {
   )
 }
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const username = context.params?.id
+ProfilePage.getInitialProps = async (context: GetServerSidePropsContext) => {
+  const username = context.query.id
+  const profile = await getProfileByUsername(username as string)
 
-  return {
-    props: {
-      username
-    }
-  }
+  return { profile }
 }
 
 export default ProfilePage

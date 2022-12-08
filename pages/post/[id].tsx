@@ -78,15 +78,11 @@ function PostPage({ post }: IPostPage) {
   )
 }
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const id = context.params?.id
+PostPage.getInitialProps = async (context: GetServerSidePropsContext) => {
+  const id = context.query.id
   const post = await getPostMinimum(id as string)
 
-  return {
-    props: {
-      post
-    }
-  }
+  return { post }
 }
 
 export default PostPage
