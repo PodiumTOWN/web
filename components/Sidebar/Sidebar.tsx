@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import { useContext } from 'react'
-import { DarkThemeToggle } from 'flowbite-react'
+import { useContext, useState } from 'react'
+import { DarkThemeToggle, Modal, Button, Textarea } from 'flowbite-react'
 import { AuthContext } from '../../contexts/AuthContext/AuthContext'
 import SignIn from '../SignIn/SignIn'
 import LogoSVG from '../../public/logo.svg'
@@ -8,17 +8,23 @@ import HomeSVG from '../../public/icons/home.svg'
 import SearchSVG from '../../public/icons/search.svg'
 import MessagesSVG from '../../public/icons/messages.svg'
 import ProfileSVG from '../../public/icons/profile.svg'
+import AddSVG from '../../public/icons/add.svg'
+import SendSVG from '../../public/icons/send.svg'
+import MediaSVG from '../../public/icons/media.svg'
+import Image from 'next/image'
 
 export default function Sidebar() {
-  const { isAuthenticated, isLoading } = useContext(AuthContext)
+  const { isAuthenticated, isLoading, profile } = useContext(AuthContext)
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [isSignInModalVisible, setIsSignInModalVisible] = useState(false)
+  const [text, setText] = useState('')
 
   return (
     <div className="flex flex-col justify-between bg-white dark:bg-black md:h-screen sticky top-0 md:border-r-[1px] dark:border-zinc-800 z-20 md:w-1/3 md:min-w-[310px] md:max-w-sm">
-      <div className="min-h-[76px] flex flex-row md:flex-col md:justify-start justify-between pl-5 pr-2 items-center md:items-start md:pt-24">
+      <div className="min-h-[76px] flex flex-row md:flex-col md:justify-start justify-between px-2 items-center md:items-start md:pt-24">
         <Link href="/" className="md:pl-16 md:mb-6 text-black dark:text-white">
           <LogoSVG className="w-8 h-8" />
         </Link>
-
         {!isLoading && (
           <>
             {isAuthenticated ? (
@@ -67,9 +73,68 @@ export default function Sidebar() {
                     <span className="hidden md:block">Profile</span>
                   </Link>
                 </li>
+                <li>
+                  <div
+                    onClick={() => setIsModalVisible(true)}
+                    className="flex p-2 md:p-4 bg-black text-white dark:bg-white dark:text-black rounded-2xl cursor-pointer transition ease-in-out"
+                  >
+                    <div className="flex justify-center md:mr-4 w-8">
+                      <AddSVG className="w-7 h-7" />
+                    </div>
+                    <span className="hidden md:block">Create</span>
+                  </div>
+                  <Modal show={isModalVisible} onClose={() => setIsModalVisible(false)}>
+                    <Modal.Header>What&apos;s on your mind ?</Modal.Header>
+                    <Modal.Body>
+                      <div className="flex gap-4">
+                        <div className="h-16 w-16 overflow-hidden relative rounded-full bg-gray-100 dark:bg-zinc-900">
+                          <Image
+                            src={profile?.avatarUrl || '/dummy-avatar.png'}
+                            fill
+                            alt="Avatar"
+                            className="object-cover"
+                            priority
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1 flex-1">
+                          <span className="font-medium">{profile?.username}</span>
+                          <Textarea
+                            value={text}
+                            onChange={(e) => setText(e.target.value)}
+                            rows={3}
+                            color="primary"
+                            placeholder="Share something..."
+                            className="text-lg"
+                          />
+                        </div>
+                      </div>
+                      <div className="flex justify-end mt-2 gap-2">
+                        <Button color="secondary">
+                          <div className="w-5">
+                            <MediaSVG />
+                          </div>
+                        </Button>
+                        <Button color="primary" disabled={text.length < 3}>
+                          <div>Send</div>
+                          <div className="w-5 ml-1">
+                            <SendSVG />
+                          </div>
+                        </Button>
+                      </div>
+                    </Modal.Body>
+                  </Modal>
+                </li>
               </ul>
             ) : (
-              <SignIn />
+              <div className="flex justify-center md:px-16 md:my-8">
+                <Button color="primary" onClick={() => setIsSignInModalVisible(true)}>
+                  Sign In
+                </Button>
+                <SignIn
+                  show={isSignInModalVisible}
+                  onClose={() => setIsSignInModalVisible(false)}
+                />
+              </div>
             )}
           </>
         )}

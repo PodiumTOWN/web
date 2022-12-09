@@ -2,13 +2,15 @@ import React, { useState, useEffect, createContext } from 'react'
 import nookies from 'nookies'
 import {
   ConfirmationResult,
+  createUserWithEmailAndPassword,
   getAuth,
+  signInWithEmailAndPassword,
   signInWithPhoneNumber,
-  signOut
+  signOut,
+  UserCredential
 } from 'firebase/auth'
 import { app } from '../../firebase/firebaseClient'
 import { getProfile, IProfile } from '../../lib/profile'
-import Image from 'next/image'
 
 interface IAuthContext {
   isAuthenticated: boolean
@@ -16,6 +18,8 @@ interface IAuthContext {
   logOut: () => void
   verifyPhoneNumber: (phoneNumber: string) => void
   verifyCode: (code: string) => void
+  signInWithEmail: (email: string, password: string) => Promise<UserCredential>
+  createAccount: (email: string, password: string) => Promise<UserCredential>
   isLoading: boolean
 }
 
@@ -25,7 +29,9 @@ export const AuthContext = createContext<IAuthContext>({
   logOut: () => {},
   verifyPhoneNumber: () => {},
   verifyCode: () => {},
-  isLoading: true
+  isLoading: true,
+  signInWithEmail: async () => ({} as any),
+  createAccount: async () => ({} as any)
 })
 
 export function AuthProvider({ children }: any) {
@@ -80,6 +86,18 @@ export function AuthProvider({ children }: any) {
     await confirmationResult?.confirm(code)
   }
 
+  const signInWithEmail = async (email: string, password: string) => {
+    try {
+      return await signInWithEmailAndPassword(auth, email, password)
+    } catch (error) {
+      throw error
+    }
+  }
+
+  const createAccount = async (email: string, password: string) => {
+    return await createUserWithEmailAndPassword(auth, email, password)
+  }
+
   const logOut = () => {
     signOut(auth)
     setProfile(null)
@@ -95,7 +113,9 @@ export function AuthProvider({ children }: any) {
         profile,
         verifyPhoneNumber,
         verifyCode,
-        isLoading
+        signInWithEmail,
+        isLoading,
+        createAccount
       }}
     >
       {children}
