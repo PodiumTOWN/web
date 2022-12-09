@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from 'react'
 import { Modal, Button, Spinner, TextInput } from 'flowbite-react'
 import { AuthContext } from '../../contexts/AuthContext/AuthContext'
 import { errorMessage } from '../../utils/error'
+import { FirebaseError } from 'firebase/app'
 
 interface ISignIn {
   show: boolean
@@ -58,7 +59,7 @@ export default function SignIn({ show, onClose }: ISignIn) {
     try {
       await signInWithEmail(email, password)
     } catch (error) {
-      setError(error.code)
+      setError((error as any).code)
     }
   }
 
@@ -66,7 +67,7 @@ export default function SignIn({ show, onClose }: ISignIn) {
     try {
       return await createAccount(email, password)
     } catch (error) {
-      setError(error.code)
+      setError((error as any).code)
     }
   }
 
