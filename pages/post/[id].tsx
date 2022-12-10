@@ -36,7 +36,9 @@ function PostPage({ post }: IPostPage) {
 
   const Loading = () => (
     <div className="flex justify-center py-8 w-full">
-      <LoadingSVG />
+      <div className="w-6 h-6">
+        <LoadingSVG />
+      </div>
     </div>
   )
 
@@ -61,7 +63,7 @@ function PostPage({ post }: IPostPage) {
         <meta property="og:title" content={`${title}`} key="ogtitle" />
       </Head>
 
-      <div className="w-full md:max-w-2xl md:border-r-[1px] dark:border-zinc-800 h-full">
+      <div className="w-full md:max-w-2xl md:border-r-[1px] dark:border-zinc-900 h-full">
         <div className="py-2 px-4">
           <div className="cursor-pointer w-8 h-8" onClick={() => router.back()}>
             <BackSVG className="w-full" />

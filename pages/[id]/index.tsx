@@ -1,20 +1,24 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { Button } from 'flowbite-react'
+import { useContext, useEffect, useState } from 'react'
 import Post from '../../components/Post/Post'
 import { getProfileByUsername, IProfile } from '../../lib/profile'
 import { getPostsWithProfile, IPostProfile } from '../../lib/posts'
 import { GetServerSidePropsContext } from 'next'
 import LoadingSVG from '../../public/icons/loading.svg'
+import { AuthContext } from '../../contexts/AuthContext/AuthContext'
 
 interface IProfilePage {
   profile: IProfile
 }
 
 function ProfilePage({ profile }: IProfilePage) {
+  const [isPending, setIsPending] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [posts, setPosts] = useState<IPostProfile[]>([])
   const title = `Podium — ${profile.username}`
+  const { unfollowFn, followFn, profile: fromProfile } = useContext(AuthContext)
 
   useEffect(() => {
     const getData = async () => {
@@ -26,6 +30,18 @@ function ProfilePage({ profile }: IProfilePage) {
 
     getData()
   }, [profile])
+
+  const follow = async () => {
+    setIsPending(true)
+    await followFn(profile.id)
+    setIsPending(false)
+  }
+
+  const unfollow = async () => {
+    setIsPending(true)
+    await unfollowFn(profile.id)
+    setIsPending(false)
+  }
 
   return (
     <>
@@ -56,10 +72,12 @@ function ProfilePage({ profile }: IProfilePage) {
         />
       </Head>
 
-      <div className="flex flex-col gap-6 w-full md:max-w-2xl md:border-r-[1px] h-full dark:md:border-r-zinc-800">
+      <div className="flex flex-col gap-6 w-full md:max-w-2xl md:border-r-[1px] h-full dark:md:border-r-zinc-900">
         {isLoading ? (
           <div className="flex justify-center py-8 w-full">
-            <LoadingSVG />
+            <div className="w-6 h-6">
+              <LoadingSVG />
+            </div>
           </div>
         ) : (
           <>
@@ -76,6 +94,19 @@ function ProfilePage({ profile }: IProfilePage) {
                 </div>
                 <div className="text-xl font-medium">{profile?.username}</div>
               </div>
+              {fromProfile?.id !== profile.id && (
+                <>
+                  {fromProfile?.following.includes(profile.id) ? (
+                    <Button color="primary" onClick={unfollow} disabled={isPending}>
+                      Unfollow
+                    </Button>
+                  ) : (
+                    <Button color="primary" onClick={follow} disabled={isPending}>
+                      Follow
+                    </Button>
+                  )}
+                </>
+              )}
             </div>
 
             <div>

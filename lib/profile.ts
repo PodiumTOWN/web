@@ -1,4 +1,6 @@
 import {
+  arrayRemove,
+  arrayUnion,
   collection,
   doc,
   getDoc,
@@ -6,6 +8,7 @@ import {
   getFirestore,
   query,
   setDoc,
+  updateDoc,
   where
 } from 'firebase/firestore'
 import { getDownloadURL, getStorage, ref } from 'firebase/storage'
@@ -44,6 +47,22 @@ export async function getProfile(id: string) {
   } catch (error) {
     throw error
   }
+}
+
+export async function follow(fromId: string, id: string) {
+  const db = getFirestore()
+  const reference = doc(db, 'users', fromId)
+  await updateDoc(reference, {
+    following: arrayUnion(id)
+  })
+}
+
+export async function unfollow(fromId: string, id: string) {
+  const db = getFirestore()
+  const reference = doc(db, 'users', fromId)
+  await updateDoc(reference, {
+    following: arrayRemove(id)
+  })
 }
 
 export async function isUsernameAvailable(username: string) {

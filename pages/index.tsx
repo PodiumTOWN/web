@@ -10,7 +10,9 @@ function HomePage() {
 
   const Loading = () => (
     <div className="flex justify-center py-8 w-full">
-      <LoaderSVG />
+      <div className="w-6 h-6">
+        <LoaderSVG />
+      </div>
     </div>
   )
 
@@ -21,7 +23,7 @@ function HomePage() {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
-      <div className="w-full md:max-w-2xl md:border-r-[1px] h-full dark:md:border-r-zinc-800">
+      <div className="w-full md:max-w-2xl md:border-r-[1px] h-full dark:md:border-r-zinc-900">
         {posts ? (
           posts.length ? (
             posts.map((post) => <Post key={post.post.id} post={post} />)

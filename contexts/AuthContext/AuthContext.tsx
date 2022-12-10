@@ -10,7 +10,7 @@ import {
   UserCredential
 } from 'firebase/auth'
 import { app } from '../../firebase/firebaseClient'
-import { getProfile, IProfile, createProfile } from '../../lib/profile'
+import { getProfile, IProfile, createProfile, follow, unfollow } from '../../lib/profile'
 import { FirebaseError } from 'firebase/app'
 
 interface IAuthContext {
@@ -24,6 +24,8 @@ interface IAuthContext {
   createAccount: (email: string, password: string) => Promise<UserCredential>
   createProfileFn: (id: string, username: string) => Promise<IProfile>
   isLoading: boolean
+  followFn: (id: string) => Promise<void>
+  unfollowFn: (id: string) => Promise<void>
 }
 
 export const AuthContext = createContext<IAuthContext>({
@@ -31,12 +33,14 @@ export const AuthContext = createContext<IAuthContext>({
   profile: null,
   user: null,
   logOut: () => {},
-  verifyPhoneNumber: () => {},
+  verifyPhoneNumber: async () => {},
   verifyCode: () => {},
   isLoading: true,
   signInWithEmail: async () => ({} as any),
   createAccount: async () => ({} as any),
-  createProfileFn: async () => ({} as any)
+  createProfileFn: async () => ({} as any),
+  followFn: async () => {},
+  unfollowFn: async () => {}
 })
 
 export function AuthProvider({ children }: any) {
@@ -87,12 +91,18 @@ export function AuthProvider({ children }: any) {
   }, [auth.currentUser])
 
   const verifyPhoneNumber = async (phoneNumber: string) => {
-    const confirmationResult = await signInWithPhoneNumber(
-      auth,
-      phoneNumber,
-      (window as any).recaptchaVerifier
-    )
-    setConfirmationResult(confirmationResult)
+    try {
+      const confirmationResult = await signInWithPhoneNumber(
+        auth,
+        phoneNumber,
+        (window as any).recaptchaVerifier
+      )
+      setConfirmationResult(confirmationResult)
+      return confirmationResult
+    } catch (error) {
+      const { code } = error as FirebaseError
+      throw code
+    }
   }
 
   const verifyCode = async (code: string) => {
@@ -129,6 +139,28 @@ export function AuthProvider({ children }: any) {
     }
   }
 
+  const followFn = async (id: string) => {
+    try {
+      const result = await follow(profile!.id, id)
+      if (profile) {
+        setProfile({ ...profile, following: [...profile.following, id] })
+      }
+    } catch (error) {
+      throw error
+    }
+  }
+
+  const unfollowFn = async (id: string) => {
+    try {
+      const result = await unfollow(profile!.id, id)
+      if (profile) {
+        setProfile({ ...profile, following: profile.following.filter((f) => f !== id) })
+      }
+    } catch (error) {
+      throw error
+    }
+  }
+
   const logOut = () => {
     signOut(auth)
     setProfile(null)
@@ -148,7 +180,9 @@ export function AuthProvider({ children }: any) {
         signInWithEmail,
         isLoading,
         createAccount,
-        createProfileFn
+        createProfileFn,
+        followFn,
+        unfollowFn
       }}
     >
       {children}

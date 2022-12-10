@@ -31,6 +31,9 @@ const theme: ThemeProps = {
       }
     },
     modal: {
+      header: {
+        base: 'flex items-center justify-between rounded-t dark:border-zinc-900 border-b p-5'
+      },
       base: 'h-screen fixed top-0 z-50 w-full flex',
       show: {
         on: 'bg-gray-600 dark:bg-opacity-80 dark:bg-black bg-opacity-80 h-full'

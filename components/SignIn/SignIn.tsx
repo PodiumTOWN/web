@@ -1,8 +1,9 @@
 import { getAuth, RecaptchaVerifier } from 'firebase/auth'
 import { useContext, useEffect, useState } from 'react'
-import { Modal, Button, Spinner, TextInput } from 'flowbite-react'
+import { Modal, Button, TextInput } from 'flowbite-react'
 import { AuthContext } from '../../contexts/AuthContext/AuthContext'
 import { errorMessage, ProfileErrorCode } from '../../utils/error'
+import LoaderSVG from '../../public/icons/loading.svg'
 
 interface ISignIn {
   show: boolean
@@ -38,18 +39,22 @@ export default function SignIn({ show, onClose, onRegister }: ISignIn) {
             size: 'invisible',
             callback: () => {
               setIsLoading(false)
-              setStep(2)
             }
           },
           auth
         )
       } catch {}
     }
-  }, [auth, show, provider])
+  }, [show, provider, auth])
 
-  const onVerifyPhone = () => {
+  const onVerifyPhone = async () => {
     setIsLoading(true)
-    verifyPhoneNumber(phoneNumber)
+    try {
+      await verifyPhoneNumber(phoneNumber)
+      setStep(2)
+    } catch (error) {
+      setError(error as ProfileErrorCode)
+    }
   }
 
   const onVerifyCode = () => {
@@ -68,9 +73,9 @@ export default function SignIn({ show, onClose, onRegister }: ISignIn) {
           break
 
         default:
+          setError(error as ProfileErrorCode)
           break
       }
-      setError(error as ProfileErrorCode)
     }
   }
 
@@ -116,8 +121,8 @@ export default function SignIn({ show, onClose, onRegister }: ISignIn) {
                 onClick={onSignInWithEmail}
               >
                 {isLoading && (
-                  <div className="mr-3">
-                    <Spinner color="primary" size="sm" />
+                  <div className="mr-2 h-4 w-4">
+                    <LoaderSVG />
                   </div>
                 )}
                 Sign in
@@ -151,8 +156,8 @@ export default function SignIn({ show, onClose, onRegister }: ISignIn) {
                 onClick={onCreateProfile}
               >
                 {isLoading && (
-                  <div className="mr-3">
-                    <Spinner color="primary" size="sm" />
+                  <div className="mr-2 h-4 w-4">
+                    <LoaderSVG />
                   </div>
                 )}
                 Sign in
@@ -182,7 +187,7 @@ export default function SignIn({ show, onClose, onRegister }: ISignIn) {
                 placeholder="Phone number"
                 required={true}
               />
-              <div className="flex gap-1 items-center">
+              <div className="flex items-center">
                 <Button
                   disabled={isLoading || phoneNumber.length < 5}
                   id="sign-in-button"
@@ -191,17 +196,18 @@ export default function SignIn({ show, onClose, onRegister }: ISignIn) {
                   className="whitespace-nowrap"
                 >
                   {isLoading && (
-                    <div className="mr-3">
-                      <Spinner color="primary" size="sm" />
+                    <div className="mr-2 h-4 w-4">
+                      <LoaderSVG />
                     </div>
                   )}
-                  Sign in
+                  <span>Sign in</span>
                 </Button>
                 <Button color="link" onClick={() => setProvider(SignInProvider.EMAIL)}>
                   Sign In using email address
                 </Button>
               </div>
             </div>
+            <div className="text-sm text-red-700">{error && errorMessage(error)}</div>
           </form>
         )
 
@@ -226,8 +232,8 @@ export default function SignIn({ show, onClose, onRegister }: ISignIn) {
                 className="whitespace-nowrap"
               >
                 {isLoading && (
-                  <div className="mr-3">
-                    <Spinner color="primary" size="sm" />
+                  <div className="mr-2 h-4 w-4">
+                    <LoaderSVG />
                   </div>
                 )}
                 Sign in

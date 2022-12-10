@@ -35,7 +35,7 @@ export default function Sidebar() {
   }
 
   return (
-    <div className="flex flex-col justify-between bg-white dark:bg-black md:h-screen sticky top-0 md:border-r-[1px] dark:border-zinc-800 z-20 md:w-1/3 md:min-w-[310px] md:max-w-sm mb-1 md:mb-0">
+    <div className="flex flex-col justify-between bg-white dark:bg-black md:h-screen sticky top-0 md:border-r-[1px] dark:border-zinc-900 z-20 md:w-1/3 md:min-w-[310px] md:max-w-sm mb-1 md:mb-0">
       <div className="min-h-[76px] flex flex-row md:flex-col md:justify-start justify-between px-5 items-center md:items-start md:pt-24">
         <Link href="/" className="md:pl-16 md:mb-6 text-black dark:text-white">
           <LogoSVG className="w-8 h-8" />
@@ -49,7 +49,7 @@ export default function Sidebar() {
                     href="/"
                     className="flex items-center p-2 md:p-4 hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-2xl cursor-pointer transition ease-in-out"
                   >
-                    <div className="flex justify-center md:mr-4">
+                    <div className="flex justify-center md:mr-4 w-7">
                       <HomeSVG className="w-7 h-7" />
                     </div>
                     <span className="hidden md:block">Home</span>
@@ -60,7 +60,7 @@ export default function Sidebar() {
                     href="/explore"
                     className="flex items-center p-2 md:p-4 hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-2xl cursor-pointer transition ease-in-out"
                   >
-                    <div className="flex justify-center md:mr-4 w-8">
+                    <div className="flex justify-center md:mr-4 w-7">
                       <SearchSVG className="w-7 h-7" />
                     </div>
                     <span className="hidden md:block">Explore</span>
@@ -71,7 +71,7 @@ export default function Sidebar() {
                     href="/messages"
                     className="flex items-center p-2 md:p-4 hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-2xl cursor-pointer transition ease-in-out"
                   >
-                    <div className="flex justify-center md:mr-4 w-8">
+                    <div className="flex justify-center md:mr-4 w-7">
                       <MessagesSVG className="w-7 h-7" />
                     </div>
                     <span className="hidden md:block">Messages</span>
@@ -82,7 +82,7 @@ export default function Sidebar() {
                     href="/profile"
                     className="flex items-center p-2 md:p-4 hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-2xl cursor-pointer transition ease-in-out"
                   >
-                    <div className="flex justify-center md:mr-4 w-8">
+                    <div className="flex justify-center md:mr-4 w-7">
                       <ProfileSVG className="w-7 h-7" />
                     </div>
                     <span className="hidden md:block">Profile</span>

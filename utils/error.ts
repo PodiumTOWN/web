@@ -3,7 +3,8 @@ export enum ProfileErrorCode {
   EMAIL_USED = 'auth/email-already-in-use',
   WEAK_PASSWORD = 'auth/weak-password',
   USERNAME_TAKEN = 'profile/username-taken',
-  INVALID_EMAIL = 'auth/invalid-email'
+  INVALID_EMAIL = 'auth/invalid-email',
+  INVALID_PHONE = 'auth/invalid-phone-number'
 }
 
 export const errorMessage = (errorCode: ProfileErrorCode) => {
@@ -19,6 +20,9 @@ export const errorMessage = (errorCode: ProfileErrorCode) => {
 
     case ProfileErrorCode.INVALID_EMAIL:
       return 'Ivalid email address.'
+
+    case ProfileErrorCode.INVALID_PHONE:
+      return 'Ivalid phone number.'
 
     case ProfileErrorCode.USERNAME_TAKEN:
       return 'Username taken.'

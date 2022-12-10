@@ -56,7 +56,7 @@ const PostsContextProvider = ({ children }: React.PropsWithChildren<any>) => {
     const post: IPostProfile = {
       post: {
         ownerId: profile!.id,
-        createdAt: Date.now() / 1000,
+        createdAt: Math.round(Date.now() / 1000),
         hashtags: [],
         images: [],
         id: uuid(),
