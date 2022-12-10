@@ -12,17 +12,32 @@ import AddSVG from '../../public/icons/add.svg'
 import SendSVG from '../../public/icons/send.svg'
 import MediaSVG from '../../public/icons/media.svg'
 import Image from 'next/image'
+import Register from '../Register/Register'
+import { PostsContext } from '../../contexts/PostsContext/PostsContext'
 
 export default function Sidebar() {
   const { isAuthenticated, isLoading, profile } = useContext(AuthContext)
+  const { send } = useContext(PostsContext)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [isSignInModalVisible, setIsSignInModalVisible] = useState(false)
+  const [isRegisterModalVisible, setIsRegisterModalVisible] = useState(false)
   const [text, setText] = useState('')
 
+  const onRegistered = () => {
+    setIsRegisterModalVisible(false)
+    setIsSignInModalVisible(true)
+  }
+
+  const onSendPost = async () => {
+    await send(text)
+    setText('')
+    setIsModalVisible(false)
+  }
+
   return (
-    <div className="flex flex-col justify-between bg-white dark:bg-black md:h-screen sticky top-0 md:border-r-[1px] dark:border-zinc-800 z-20 md:w-1/3 md:min-w-[310px] md:max-w-sm">
+    <div className="flex flex-col justify-between bg-white dark:bg-black md:h-screen sticky top-0 md:border-r-[1px] dark:border-zinc-800 z-20 md:w-1/3 md:min-w-[310px] md:max-w-sm mb-1 md:mb-0">
       <div className="min-h-[76px] flex flex-row md:flex-col md:justify-start justify-between px-2 items-center md:items-start md:pt-24">
-        <Link href="/" className="md:pl-16 md:mb-6 text-black dark:text-white">
+        <Link href="/" className="pl-2 md:pl-16 md:mb-6 text-black dark:text-white">
           <LogoSVG className="w-8 h-8" />
         </Link>
         {!isLoading && (
@@ -114,7 +129,11 @@ export default function Sidebar() {
                             <MediaSVG />
                           </div>
                         </Button>
-                        <Button color="primary" disabled={text.length < 3}>
+                        <Button
+                          color="primary"
+                          disabled={text.length < 3}
+                          onClick={onSendPost}
+                        >
                           <div>Send</div>
                           <div className="w-5 ml-1">
                             <SendSVG />
@@ -133,6 +152,19 @@ export default function Sidebar() {
                 <SignIn
                   show={isSignInModalVisible}
                   onClose={() => setIsSignInModalVisible(false)}
+                  onRegister={() => {
+                    setIsSignInModalVisible(false)
+                    setIsRegisterModalVisible(true)
+                  }}
+                />
+                <Register
+                  onRegistered={onRegistered}
+                  show={isRegisterModalVisible}
+                  onClose={() => setIsRegisterModalVisible(false)}
+                  onSignIn={() => {
+                    setIsSignInModalVisible(true)
+                    setIsRegisterModalVisible(false)
+                  }}
                 />
               </div>
             )}

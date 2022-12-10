@@ -7,6 +7,7 @@ import {
   limit,
   orderBy,
   query,
+  setDoc,
   where
 } from 'firebase/firestore'
 import unique from '../utils/unique'
@@ -16,11 +17,28 @@ export interface IPost {
   id: string
   ownerId: string
   text: string
+  createdAt: number
+  hashtags: string[]
+  images: {
+    id: string
+    url: string
+  }[]
 }
 
 export interface IPostProfile {
   post: IPost
   profile: IProfile
+}
+
+export async function sendPost(post: IPostProfile) {
+  try {
+    const db = getFirestore()
+    const reference = doc(db, 'posts', post.post.id)
+    await setDoc(reference, post.post)
+    return post
+  } catch (error) {
+    throw error
+  }
 }
 
 export async function getPostMinimum(id: string) {
@@ -41,16 +59,19 @@ export async function getPosts(profileId: string): Promise<IPostProfile[]> {
   )
   const documents = await getDocs(postsQuery)
   const data = documents.docs.map((d) => d.data() as IPost)
+  if (data.length) {
+    const uniqueProfileIds = data.map((d) => d.ownerId).filter(unique)
+    const profiles = await getProfiles(uniqueProfileIds)
 
-  const uniqueProfileIds = data.map((d) => d.ownerId).filter(unique)
-  const profiles = await getProfiles(uniqueProfileIds)
+    return data
+      .map((post) => ({
+        post,
+        profile: profiles.find((profile) => profile.id === post.ownerId)
+      }))
+      .filter((p) => p.profile) as IPostProfile[]
+  }
 
-  return data
-    .map((post) => ({
-      post,
-      profile: profiles.find((profile) => profile.id === post.ownerId)
-    }))
-    .filter((p) => p.profile) as IPostProfile[]
+  return []
 }
 
 export async function getPostsWithProfile(profile: IProfile): Promise<IPostProfile[]> {
@@ -85,15 +106,19 @@ export async function getPostsForProfile(
   const documents = await getDocs(postsQuery)
   const data = documents.docs.map((d) => d.data() as IPost)
 
-  const uniqueProfileIds = data.map((d) => d.ownerId).filter(unique)
-  const profiles = await getProfiles(uniqueProfileIds)
+  if (data.length) {
+    const uniqueProfileIds = data.map((d) => d.ownerId).filter(unique)
 
-  return data
-    .map((post) => ({
-      post,
-      profile: profiles.find((profile) => profile.id === post.ownerId)
-    }))
-    .filter((p) => p.profile) as IPostProfile[]
+    const profiles = await getProfiles(uniqueProfileIds)
+
+    return data
+      .map((post) => ({
+        post,
+        profile: profiles.find((profile) => profile.id === post.ownerId)
+      }))
+      .filter((p) => p.profile) as IPostProfile[]
+  }
+  return []
 }
 
 export async function getPostsForHashtag(hashtag: string): Promise<IPostProfile[]> {

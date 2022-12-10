@@ -3,9 +3,10 @@ import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { MouseEvent } from 'react'
 import MoreSVG from '../../public/icons/more.svg'
+import { IPostProfile } from '../../lib/posts'
 
 interface IPost {
-  post: any
+  post: IPostProfile
   variant?: string
 }
 

@@ -6,11 +6,13 @@ import {
   useEffect,
   useState
 } from 'react'
+import { v4 as uuid } from 'uuid'
 import {
   getPosts,
   getPostsForHashtag,
   getPostsForProfile,
-  IPostProfile
+  IPostProfile,
+  sendPost
 } from '../../lib/posts'
 import { AuthContext } from '../AuthContext/AuthContext'
 
@@ -18,12 +20,14 @@ interface IPostsContext {
   posts: null | IPostProfile[]
   profilePosts: null | IPostProfile[]
   setPosts: Dispatch<SetStateAction<IPostProfile[] | null>>
+  send: (text: string) => Promise<IPostProfile>
 }
 
 const PostsContext = createContext<IPostsContext>({
   posts: null,
   profilePosts: null,
-  setPosts: () => null
+  setPosts: () => null,
+  send: async () => ({} as any)
 })
 
 const PostsContextProvider = ({ children }: React.PropsWithChildren<any>) => {
@@ -48,8 +52,28 @@ const PostsContextProvider = ({ children }: React.PropsWithChildren<any>) => {
     }
   }, [profile, isLoading])
 
+  const send = async (text: string) => {
+    const post: IPostProfile = {
+      post: {
+        ownerId: profile!.id,
+        createdAt: Date.now() / 1000,
+        hashtags: [],
+        images: [],
+        id: uuid(),
+        text
+      },
+      profile: profile!
+    }
+    if (posts) {
+      setPosts([post, ...posts])
+    } else {
+      setPosts([post])
+    }
+    return await sendPost(post)
+  }
+
   return (
-    <PostsContext.Provider value={{ posts, profilePosts, setPosts }}>
+    <PostsContext.Provider value={{ send, posts, profilePosts, setPosts }}>
       {children}
     </PostsContext.Provider>
   )

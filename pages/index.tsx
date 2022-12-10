@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Link from 'next/link'
 import { useContext } from 'react'
 import Post from '../components/Post/Post'
 import { PostsContext } from '../contexts/PostsContext/PostsContext'
@@ -22,7 +23,15 @@ function HomePage() {
 
       <div className="w-full md:max-w-2xl md:border-r-[1px] h-full dark:md:border-r-zinc-800">
         {posts ? (
-          posts.map((post) => <Post key={post.post.id} post={post} />)
+          posts.length ? (
+            posts.map((post) => <Post key={post.post.id} post={post} />)
+          ) : (
+            <div className="flex justify-center p-12">
+              <Link className="inline" href="/explore">
+                No posts. Follow some people in Explore tab.
+              </Link>
+            </div>
+          )
         ) : (
           <Loading />
         )}

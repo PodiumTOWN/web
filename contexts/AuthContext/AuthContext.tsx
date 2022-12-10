@@ -10,33 +10,39 @@ import {
   UserCredential
 } from 'firebase/auth'
 import { app } from '../../firebase/firebaseClient'
-import { getProfile, IProfile } from '../../lib/profile'
+import { getProfile, IProfile, createProfile } from '../../lib/profile'
+import { FirebaseError } from 'firebase/app'
 
 interface IAuthContext {
   isAuthenticated: boolean
   profile: IProfile | null
+  user: UserCredential | null
   logOut: () => void
   verifyPhoneNumber: (phoneNumber: string) => void
   verifyCode: (code: string) => void
-  signInWithEmail: (email: string, password: string) => Promise<UserCredential>
+  signInWithEmail: (email: string, password: string) => Promise<IProfile>
   createAccount: (email: string, password: string) => Promise<UserCredential>
+  createProfileFn: (id: string, username: string) => Promise<IProfile>
   isLoading: boolean
 }
 
 export const AuthContext = createContext<IAuthContext>({
   isAuthenticated: false,
   profile: null,
+  user: null,
   logOut: () => {},
   verifyPhoneNumber: () => {},
   verifyCode: () => {},
   isLoading: true,
   signInWithEmail: async () => ({} as any),
-  createAccount: async () => ({} as any)
+  createAccount: async () => ({} as any),
+  createProfileFn: async () => ({} as any)
 })
 
 export function AuthProvider({ children }: any) {
   const [isLoading, setIsLoading] = useState(true)
   const [profile, setProfile] = useState<IProfile | null>(null)
+  const [user, setUser] = useState<UserCredential | null>(null)
   const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(
     null
   )
@@ -55,12 +61,19 @@ export function AuthProvider({ children }: any) {
         setProfile(null)
         return
       }
-      const profile = await getProfile(user.uid)
-      const token = await user.getIdToken()
-      setProfile(profile)
-      nookies.destroy(null, 'token')
-      nookies.set(null, 'token', token, { path: '/' })
-      setIsLoading(false)
+      try {
+        const profile = await getProfile(user.uid)
+        const token = await user.getIdToken()
+        setProfile(profile)
+        nookies.destroy(null, 'token')
+        nookies.set(null, 'token', token, { path: '/' })
+        setIsLoading(false)
+      } catch (error) {
+        nookies.destroy(null, 'token')
+        nookies.set(null, 'token', '', { path: '/' })
+        setIsLoading(false)
+        setProfile(null)
+      }
     })
   }, [auth])
 
@@ -88,14 +101,32 @@ export function AuthProvider({ children }: any) {
 
   const signInWithEmail = async (email: string, password: string) => {
     try {
-      return await signInWithEmailAndPassword(auth, email, password)
+      const result = await signInWithEmailAndPassword(auth, email, password)
+      setUser(result)
+      const profile = await getProfile(result.user.uid)
+      setProfile(profile)
+      return profile
     } catch (error) {
       throw error
     }
   }
 
   const createAccount = async (email: string, password: string) => {
-    return await createUserWithEmailAndPassword(auth, email, password)
+    try {
+      return await createUserWithEmailAndPassword(auth, email, password)
+    } catch (error) {
+      throw (error as FirebaseError).code
+    }
+  }
+
+  const createProfileFn = async (id: string, username: string) => {
+    try {
+      const result = await createProfile(id, username)
+      setProfile(result)
+      return result
+    } catch (error) {
+      throw error
+    }
   }
 
   const logOut = () => {
@@ -111,11 +142,13 @@ export function AuthProvider({ children }: any) {
         isAuthenticated: !!profile,
         logOut,
         profile,
+        user,
         verifyPhoneNumber,
         verifyCode,
         signInWithEmail,
         isLoading,
-        createAccount
+        createAccount,
+        createProfileFn
       }}
     >
       {children}
