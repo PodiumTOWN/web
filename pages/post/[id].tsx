@@ -1,23 +1,29 @@
 import { GetServerSidePropsContext } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import { TextInput, Button } from 'flowbite-react'
 import Post from '../../components/Post/Post'
-import { getComments } from '../../lib/comments'
+import { addComment, getComments, IPostComment } from '../../lib/comments'
+import { v4 as uuid } from 'uuid'
 import { getPostMinimum, IPost } from '../../lib/posts'
 import { getProfile, IProfile } from '../../lib/profile'
 import BackSVG from '../../public/icons/arrow-left.svg'
 import LoadingSVG from '../../public/icons/loading.svg'
+import Image from 'next/image'
+import { AuthContext } from '../../contexts/AuthContext/AuthContext'
 
 interface IPostPage {
   post: IPost
 }
 
 function PostPage({ post }: IPostPage) {
+  const { profile: fromProfile } = useContext(AuthContext)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
-  const [comments, setComments] = useState<any[] | null>(null)
+  const [comments, setComments] = useState<IPostComment[] | null>(null)
   const [profile, setProfile] = useState<IProfile | null>(null)
+  const [commentText, setCommentText] = useState('')
   const title = profile ? `Podium — Post by ${profile.username}` : 'Podium — Post'
 
   useEffect(() => {
@@ -41,6 +47,28 @@ function PostPage({ post }: IPostPage) {
       </div>
     </div>
   )
+
+  const sendComment = async () => {
+    const comment: IPostComment = {
+      post: {
+        id: uuid(),
+        ownerId: fromProfile!.id,
+        text: commentText,
+        postId: post.id,
+        createdAt: Math.round(Date.now() / 1000),
+        hashtags: [],
+        images: []
+      },
+      profile: fromProfile!
+    }
+
+    if (comments) {
+      setComments([comment, ...comments])
+    } else {
+      setComments([comment])
+    }
+    await addComment(comment)
+  }
 
   return (
     <>
@@ -69,11 +97,41 @@ function PostPage({ post }: IPostPage) {
             <BackSVG className="w-full" />
           </div>
         </div>
+
         {profile && <Post post={{ post, profile }} variant="big" />}
+
         {isLoading ? (
           <Loading />
         ) : (
-          comments?.map((comment) => <Post key={comment.post.id} post={comment} />)
+          <>
+            <div className="px-5 my-4 flex gap-2 items-center">
+              <div className="relative w-16 h-16 rounded-full overflow-hidden">
+                <Image
+                  src={fromProfile?.avatarUrl || '/dummy-avatar.png'}
+                  fill
+                  alt="You"
+                  className="object-cover"
+                />
+              </div>
+              <TextInput
+                value={commentText}
+                onChange={(e) => setCommentText(e.target.value)}
+                color="primary"
+                placeholder="What's on your mind ?"
+                className="flex-1"
+              />
+              <Button
+                color="primary"
+                onClick={sendComment}
+                disabled={commentText.length < 4}
+              >
+                Send
+              </Button>
+            </div>
+            {comments?.map((comment) => (
+              <Post key={comment.post.id} post={comment} />
+            ))}
+          </>
         )}
       </div>
     </>

@@ -5,9 +5,10 @@ import { useRouter } from 'next/router'
 import { MouseEvent, useState } from 'react'
 import MoreSVG from '../../public/icons/more.svg'
 import { IPostProfile } from '../../lib/posts'
+import { IPostComment } from '../../lib/comments'
 
 interface IPost {
-  post: IPostProfile
+  post: IPostProfile | IPostComment
   variant?: string
 }
 
