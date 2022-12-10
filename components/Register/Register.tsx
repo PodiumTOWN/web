@@ -116,7 +116,7 @@ export default function Register({ show, onClose, onSignIn, onRegistered }: IReg
     <Modal show={show} onClose={onClose}>
       <Modal.Header>Create Account</Modal.Header>
       <Modal.Body>
-        <div className="space-y-2">
+        <div className="space-y-2 p-4">
           {Steps()}
           <div className="text-sm text-red-700">{error && errorMessage(error)}</div>
         </div>

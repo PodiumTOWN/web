@@ -34,7 +34,9 @@ function TagPage() {
       <div className="w-full md:max-w-2xl md:border-r-[1px] h-full dark:md:border-r-zinc-800">
         {isLoading ? (
           <div className="flex justify-center py-8 w-full">
-            <LoadingSVG />
+            <div className="w-7 h-7">
+              <LoadingSVG />
+            </div>
           </div>
         ) : (
           posts?.map((post: any) => <Post key={post.post.id} post={post} />)

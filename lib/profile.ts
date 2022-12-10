@@ -20,6 +20,8 @@ export interface IProfile {
   avatarUrl?: string
   avatarId?: string
   following: string[]
+  blockedPosts: string[]
+  blockedProfiles: string[]
 }
 
 export async function getProfile(id: string) {
@@ -80,7 +82,9 @@ export async function createProfile(id: string, username: string) {
     const data: IProfile = {
       id,
       username,
-      following: [id]
+      following: [id],
+      blockedPosts: [],
+      blockedProfiles: []
     }
     const isAvailable = await isUsernameAvailable(username)
     if (isAvailable) {
@@ -134,4 +138,12 @@ export async function getProfiles(ids: string[]) {
   )
 
   return profiles as IProfile[]
+}
+
+export async function blockProfile(id: string, fromProfile: IProfile) {
+  const db = getFirestore()
+  const reference = doc(db, 'users', fromProfile.id)
+  await updateDoc(reference, {
+    blockedProfiles: arrayUnion(id)
+  })
 }

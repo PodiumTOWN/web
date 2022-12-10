@@ -8,10 +8,13 @@ import {
 } from 'react'
 import { v4 as uuid } from 'uuid'
 import {
+  blockPost,
+  deletePost,
   getPosts,
   getPostsForHashtag,
   getPostsForProfile,
   IPostProfile,
+  reportPost,
   sendPost
 } from '../../lib/posts'
 import { AuthContext } from '../AuthContext/AuthContext'
@@ -21,13 +24,19 @@ interface IPostsContext {
   profilePosts: null | IPostProfile[]
   setPosts: Dispatch<SetStateAction<IPostProfile[] | null>>
   send: (text: string) => Promise<IPostProfile>
+  deletePostFn: (postId: string) => Promise<void>
+  blockPostFn: (postId: string) => Promise<void>
+  reportPostFn: (postId: string) => Promise<void>
 }
 
 const PostsContext = createContext<IPostsContext>({
   posts: null,
   profilePosts: null,
   setPosts: () => null,
-  send: async () => ({} as any)
+  send: async () => ({} as any),
+  deletePostFn: async () => {},
+  blockPostFn: async () => {},
+  reportPostFn: async () => {}
 })
 
 const PostsContextProvider = ({ children }: React.PropsWithChildren<any>) => {
@@ -39,7 +48,11 @@ const PostsContextProvider = ({ children }: React.PropsWithChildren<any>) => {
     const getData = async () => {
       if (profile) {
         const posts = await getPostsForProfile(profile.following)
-        setPosts(posts)
+        setPosts(
+          posts
+            .filter((p) => !profile.blockedPosts.includes(p.post.id))
+            .filter((p) => !profile.blockedProfiles.includes(p.profile.id))
+        )
         const profilePosts = await getPosts(profile.id)
         setProfilePosts(profilePosts)
       } else {
@@ -72,8 +85,42 @@ const PostsContextProvider = ({ children }: React.PropsWithChildren<any>) => {
     return await sendPost(post)
   }
 
+  const deletePostFn = async (postId: string) => {
+    if (posts) {
+      setPosts(posts.filter((p) => p.post.id !== postId))
+    }
+    if (profilePosts) {
+      setProfilePosts(profilePosts.filter((p) => p.post.id !== postId))
+    }
+    await deletePost(postId)
+  }
+
+  const blockPostFn = async (postId: string) => {
+    if (posts && profile) {
+      setPosts(posts.filter((p) => p.post.id !== postId))
+      await blockPost(postId, profile)
+    }
+  }
+
+  const reportPostFn = async (postId: string) => {
+    if (posts && profile) {
+      setPosts(posts.filter((p) => p.post.id !== postId))
+      await reportPost(postId, profile)
+    }
+  }
+
   return (
-    <PostsContext.Provider value={{ send, posts, profilePosts, setPosts }}>
+    <PostsContext.Provider
+      value={{
+        reportPostFn,
+        blockPostFn,
+        deletePostFn,
+        send,
+        posts,
+        profilePosts,
+        setPosts
+      }}
+    >
       {children}
     </PostsContext.Provider>
   )

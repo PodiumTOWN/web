@@ -10,7 +10,14 @@ import {
   UserCredential
 } from 'firebase/auth'
 import { app } from '../../firebase/firebaseClient'
-import { getProfile, IProfile, createProfile, follow, unfollow } from '../../lib/profile'
+import {
+  getProfile,
+  IProfile,
+  createProfile,
+  follow,
+  unfollow,
+  blockProfile
+} from '../../lib/profile'
 import { FirebaseError } from 'firebase/app'
 
 interface IAuthContext {
@@ -26,6 +33,7 @@ interface IAuthContext {
   isLoading: boolean
   followFn: (id: string) => Promise<void>
   unfollowFn: (id: string) => Promise<void>
+  blockProfileFn: (id: string) => Promise<void>
 }
 
 export const AuthContext = createContext<IAuthContext>({
@@ -40,7 +48,8 @@ export const AuthContext = createContext<IAuthContext>({
   createAccount: async () => ({} as any),
   createProfileFn: async () => ({} as any),
   followFn: async () => {},
-  unfollowFn: async () => {}
+  unfollowFn: async () => {},
+  blockProfileFn: async () => {}
 })
 
 export function AuthProvider({ children }: any) {
@@ -161,6 +170,17 @@ export function AuthProvider({ children }: any) {
     }
   }
 
+  const blockProfileFn = async (id: string) => {
+    try {
+      if (profile) {
+        await blockProfile(id, profile)
+        setProfile({ ...profile, blockedProfiles: [...profile.blockedProfiles, id] })
+      }
+    } catch (error) {
+      throw error
+    }
+  }
+
   const logOut = () => {
     signOut(auth)
     setProfile(null)
@@ -182,7 +202,8 @@ export function AuthProvider({ children }: any) {
         createAccount,
         createProfileFn,
         followFn,
-        unfollowFn
+        unfollowFn,
+        blockProfileFn
       }}
     >
       {children}

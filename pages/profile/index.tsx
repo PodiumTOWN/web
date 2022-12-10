@@ -8,8 +8,9 @@ import { AuthContext } from '../../contexts/AuthContext/AuthContext'
 import { PostsContext } from '../../contexts/PostsContext/PostsContext'
 
 function Profile() {
-  const { logOut, profile } = useContext(AuthContext)
-  const { profilePosts, setPosts } = useContext(PostsContext)
+  const { logOut, profile, blockProfileFn } = useContext(AuthContext)
+  const { profilePosts, setPosts, deletePostFn, blockPostFn, reportPostFn } =
+    useContext(PostsContext)
   const router = useRouter()
 
   const onLogout = () => {
@@ -46,7 +47,15 @@ function Profile() {
 
         <div>
           {profilePosts?.map((post) => (
-            <Post key={post.post.id} post={post} />
+            <Post
+              key={post.post.id}
+              post={post}
+              onDeletePost={deletePostFn}
+              onBlockPost={blockPostFn}
+              onReportPost={reportPostFn}
+              onBlockProfile={blockProfileFn}
+              fromProfile={profile}
+            />
           ))}
         </div>
       </div>

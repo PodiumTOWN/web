@@ -264,7 +264,7 @@ export default function SignIn({ show, onClose, onRegister }: ISignIn) {
     <Modal show={show} onClose={onClose}>
       <Modal.Header>Sign In</Modal.Header>
       <Modal.Body>
-        <div className="space-y-2">{Provider()}</div>
+        <div className="space-y-2 p-4">{Provider()}</div>
       </Modal.Body>
       <Modal.Footer>
         <div className="text-xs text-gray-500 flex justify-between items-center w-full gap-2">

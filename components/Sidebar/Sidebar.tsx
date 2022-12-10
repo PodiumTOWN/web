@@ -35,7 +35,7 @@ export default function Sidebar() {
   }
 
   return (
-    <div className="flex flex-col justify-between bg-white dark:bg-black md:h-screen sticky top-0 md:border-r-[1px] dark:border-zinc-900 z-20 md:w-1/3 md:min-w-[310px] md:max-w-sm mb-1 md:mb-0">
+    <div className="flex flex-col justify-between bg-white dark:bg-black md:h-screen sticky top-0 md:border-r-[1px] dark:border-zinc-900 z-50 md:w-1/3 md:min-w-[310px] md:max-w-sm mb-1 md:mb-0">
       <div className="min-h-[76px] flex flex-row md:flex-col md:justify-start justify-between px-5 items-center md:items-start md:pt-24">
         <Link href="/" className="md:pl-16 md:mb-6 text-black dark:text-white">
           <LogoSVG className="w-8 h-8" />
@@ -101,7 +101,7 @@ export default function Sidebar() {
                   <Modal show={isModalVisible} onClose={() => setIsModalVisible(false)}>
                     <Modal.Header>What&apos;s on your mind ?</Modal.Header>
                     <Modal.Body>
-                      <div className="flex gap-2 sm:gap-4">
+                      <div className="flex gap-2 sm:gap-4 p-4 md:p-0">
                         <div className="h-12 w-12 sm:h-16 sm:w-16 overflow-hidden relative rounded-full bg-gray-100 dark:bg-zinc-900">
                           <Image
                             src={profile?.avatarUrl || '/dummy-avatar.png'}
@@ -123,7 +123,7 @@ export default function Sidebar() {
                           />
                         </div>
                       </div>
-                      <div className="flex justify-end mt-2 gap-2">
+                      <div className="flex justify-end gap-2 px-4 pb-4 md:px-0 md:pt-4">
                         <Button color="secondary">
                           <div className="w-5">
                             <MediaSVG />

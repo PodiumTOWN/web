@@ -7,11 +7,11 @@ const theme: ThemeProps = {
     },
     button: {
       inner: {
-        base: '!p-0'
+        base: '!p-0 flex items-center'
       },
       color: {
         primary: 'bg-gray-900 text-white dark:bg-zinc-800 !px-4 !py-3 rounded-xl',
-        secondary: 'bg-gray-100 dark:bg-zinc-800',
+        secondary: 'bg-gray-100 dark:bg-zinc-800 !px-4 !py-3',
         link: 'ouline-none focus:border-0 focus:!ring-0 px-2'
       }
     },
@@ -36,7 +36,15 @@ const theme: ThemeProps = {
         primary: 'fill-gray-600'
       }
     },
+    dropdown: {
+      floating: {
+        base: 'z-50 w-[180px]'
+      }
+    },
     modal: {
+      body: {
+        base: 'md:p-4'
+      },
       header: {
         base: 'flex items-center justify-between rounded-t dark:border-zinc-900 border-b p-5'
       },
@@ -45,6 +53,7 @@ const theme: ThemeProps = {
         on: 'bg-gray-600 dark:bg-opacity-80 dark:bg-black bg-opacity-80 h-full'
       },
       content: {
+        base: 'w-full p-2',
         inner: 'bg-white dark:bg-black'
       }
     }

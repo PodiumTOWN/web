@@ -12,13 +12,15 @@ import BackSVG from '../../public/icons/arrow-left.svg'
 import LoadingSVG from '../../public/icons/loading.svg'
 import Image from 'next/image'
 import { AuthContext } from '../../contexts/AuthContext/AuthContext'
+import { PostsContext } from '../../contexts/PostsContext/PostsContext'
 
 interface IPostPage {
   post: IPost
 }
 
 function PostPage({ post }: IPostPage) {
-  const { profile: fromProfile } = useContext(AuthContext)
+  const { deletePostFn, blockPostFn, reportPostFn } = useContext(PostsContext)
+  const { profile: fromProfile, blockProfileFn } = useContext(AuthContext)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const [comments, setComments] = useState<IPostComment[] | null>(null)
@@ -47,6 +49,24 @@ function PostPage({ post }: IPostPage) {
       </div>
     </div>
   )
+
+  const onDelete = (postId: string) => {
+    deletePostFn(postId)
+    router.push('/')
+  }
+
+  const onBlockPost = (postId: string) => {
+    blockPostFn(postId)
+    router.push('/')
+  }
+
+  const onReportPost = (postId: string) => {
+    reportPostFn(postId)
+  }
+
+  const onBlockProfile = (id: string) => {
+    blockProfileFn(id)
+  }
 
   const sendComment = async () => {
     const comment: IPostComment = {
@@ -98,7 +118,17 @@ function PostPage({ post }: IPostPage) {
           </div>
         </div>
 
-        {profile && <Post post={{ post, profile }} variant="big" />}
+        {profile && (
+          <Post
+            post={{ post, profile }}
+            variant="big"
+            onDeletePost={onDelete}
+            onBlockPost={onBlockPost}
+            onReportPost={onReportPost}
+            onBlockProfile={onBlockProfile}
+            fromProfile={fromProfile}
+          />
+        )}
 
         {isLoading ? (
           <Loading />
@@ -132,7 +162,15 @@ function PostPage({ post }: IPostPage) {
               </div>
             )}
             {comments?.map((comment) => (
-              <Post key={comment.post.id} post={comment} />
+              <Post
+                key={comment.post.id}
+                post={comment}
+                onDeletePost={onDelete}
+                onBlockPost={onBlockPost}
+                onReportPost={onReportPost}
+                onBlockProfile={onBlockProfile}
+                fromProfile={fromProfile}
+              />
             ))}
           </>
         )}

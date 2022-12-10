@@ -1,18 +1,32 @@
 import Image from 'next/image'
 import dayjs from 'dayjs'
-import { Modal, Carousel } from 'flowbite-react'
+import { Modal, Carousel, Dropdown } from 'flowbite-react'
 import { useRouter } from 'next/router'
 import { MouseEvent, useState } from 'react'
 import MoreSVG from '../../public/icons/more.svg'
 import { IPostProfile } from '../../lib/posts'
 import { IPostComment } from '../../lib/comments'
+import { IProfile } from '../../lib/profile'
 
 interface IPost {
+  fromProfile?: IProfile | null
   post: IPostProfile | IPostComment
   variant?: string
+  onDeletePost: (postId: string) => void
+  onBlockPost: (postId: string) => void
+  onReportPost: (postId: string) => void
+  onBlockProfile: (id: string) => void
 }
 
-export default function Post({ post, variant = 'base' }: IPost) {
+export default function Post({
+  fromProfile,
+  post,
+  variant = 'base',
+  onDeletePost,
+  onBlockPost,
+  onReportPost,
+  onBlockProfile
+}: IPost) {
   const router = useRouter()
   const [isModalVisible, setIsModalVisible] = useState(false)
 
@@ -33,13 +47,10 @@ export default function Post({ post, variant = 'base' }: IPost) {
 
   return (
     <>
-      <div
-        onClick={onNavigatePost}
-        className="flex w-full p-5 border-b-[1px] dark:border-b-zinc-900 transition ease-in-out md:hover:bg-gray-100 md:dark:hover:bg-zinc-900 cursor-pointer"
-      >
+      <div className="relative flex w-full p-5 border-b-[1px] dark:border-b-zinc-900 transition ease-in-out md:hover:bg-gray-100 md:dark:hover:bg-zinc-900 cursor-pointer">
         <div
           onClick={onNavigateProfile}
-          className="h-[52px] min-w-[52px] relative overflow-hidden mr-3 rounded-full bg-gray-100 dark:bg-zinc-900"
+          className="z-20 h-[52px] min-w-[52px] relative overflow-hidden mr-3 rounded-full bg-gray-100 dark:bg-zinc-900"
         >
           <Image
             priority
@@ -49,24 +60,59 @@ export default function Post({ post, variant = 'base' }: IPost) {
             className="object-cover"
           />
         </div>
+        <div
+          onClick={onNavigatePost}
+          className="absolute top-0 bottom-0 left-0 right-0 z-10"
+        />
         <div className="w-full">
           <div className="flex justify-between">
-            <div onClick={onNavigateProfile} className="font-semibold hover:underline">
+            <div
+              onClick={onNavigateProfile}
+              className="z-20 font-semibold hover:underline"
+            >
               {post.profile.username}
             </div>
-            <div className="flex items-center gap-2 text-sm">
-              <div className="text-gray-400">
-                <MoreSVG className="w-4 h-4" />
+            <div className="flex items-center gap-2 text-sm z-100">
+              <div className="text-gray-400 relative">
+                {fromProfile && (
+                  <Dropdown
+                    label={<MoreSVG className="w-4 h-4 z-40 hover:text-black" />}
+                    inline={true}
+                    arrowIcon={false}
+                  >
+                    {fromProfile.id !== post.profile.id && (
+                      <>
+                        <Dropdown.Item onClick={() => onBlockPost(post.post.id)}>
+                          Block post
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={() => onReportPost(post.post.id)}>
+                          Report post
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={() => onBlockProfile(post.profile.id)}>
+                          Block profile
+                        </Dropdown.Item>
+                      </>
+                    )}
+                    {post.profile.id === fromProfile?.id && (
+                      <Dropdown.Item onClick={() => onDeletePost(post.post.id)}>
+                        Delete post
+                      </Dropdown.Item>
+                    )}
+                  </Dropdown>
+                )}
               </div>
               <div className="text-gray-400">
                 {dayjs().to(dayjs(post.post.createdAt * 1000))}
               </div>
             </div>
           </div>
-          <div className={`${variant === 'big' ? 'text-2xl' : 'text-base'}`}>
+          <div
+            onClick={onNavigatePost}
+            className={`relative z-20 ${variant === 'big' ? 'text-2xl' : 'text-base'}`}
+          >
             {post.post.text}
           </div>
-          <div className="flex -mx-1 mt-1" onClick={onImage}>
+          <div className="relative z-20 flex -mx-1 mt-1" onClick={onImage}>
             {post.post.images.map((image) => (
               <div
                 key={image.id}
@@ -86,8 +132,8 @@ export default function Post({ post, variant = 'base' }: IPost) {
       </div>
       <Modal show={isModalVisible} onClose={() => setIsModalVisible(false)} size="5xl">
         <Modal.Header />
-        <Modal.Body>
-          <div className="space-y-6 p-6 h-[calc(100vh-12rem)]">
+        <Modal.Body color="secondary">
+          <div className="space-y-6 h-[calc(100vh-10rem)]">
             <Carousel slide={false}>
               {post.post.images.map((image) => (
                 <div key={image.id} className="h-full w-full relative">

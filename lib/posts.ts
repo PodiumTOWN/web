@@ -1,5 +1,7 @@
 import {
+  arrayUnion,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -8,6 +10,7 @@ import {
   orderBy,
   query,
   setDoc,
+  updateDoc,
   where
 } from 'firebase/firestore'
 import unique from '../utils/unique'
@@ -152,4 +155,30 @@ export async function getPost(id: string): Promise<IPostProfile> {
     post: data,
     profile
   }
+}
+
+export async function deletePost(id: string) {
+  const db = getFirestore()
+  const reference = doc(db, 'posts', id)
+  await deleteDoc(reference)
+}
+
+export async function reportPost(id: string, fromProfile: IProfile) {
+  const db = getFirestore()
+  const reference = doc(db, 'reports', id)
+  await setDoc(
+    reference,
+    {
+      reporters: arrayUnion(fromProfile.id)
+    },
+    { merge: true }
+  )
+}
+
+export async function blockPost(id: string, fromProfile: IProfile) {
+  const db = getFirestore()
+  const reference = doc(db, 'users', fromProfile.id)
+  await updateDoc(reference, {
+    blockedPosts: arrayUnion(id)
+  })
 }

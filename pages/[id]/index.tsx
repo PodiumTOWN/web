@@ -8,6 +8,7 @@ import { getPostsWithProfile, IPostProfile } from '../../lib/posts'
 import { GetServerSidePropsContext } from 'next'
 import LoadingSVG from '../../public/icons/loading.svg'
 import { AuthContext } from '../../contexts/AuthContext/AuthContext'
+import { PostsContext } from '../../contexts/PostsContext/PostsContext'
 
 interface IProfilePage {
   profile: IProfile
@@ -18,18 +19,26 @@ function ProfilePage({ profile }: IProfilePage) {
   const [isLoading, setIsLoading] = useState(false)
   const [posts, setPosts] = useState<IPostProfile[]>([])
   const title = `Podium — ${profile.username}`
-  const { unfollowFn, followFn, profile: fromProfile } = useContext(AuthContext)
+  const { deletePostFn, blockPostFn, reportPostFn } = useContext(PostsContext)
+  const {
+    unfollowFn,
+    followFn,
+    profile: fromProfile,
+    blockProfileFn
+  } = useContext(AuthContext)
 
   useEffect(() => {
     const getData = async () => {
-      setIsLoading(true)
-      const posts = await getPostsWithProfile(profile)
-      setPosts(posts)
-      setIsLoading(false)
+      if (!fromProfile?.blockedProfiles.includes(profile.id)) {
+        setIsLoading(true)
+        const posts = await getPostsWithProfile(profile)
+        setPosts(posts)
+        setIsLoading(false)
+      }
     }
 
     getData()
-  }, [profile])
+  }, [profile, fromProfile])
 
   const follow = async () => {
     setIsPending(true)
@@ -41,6 +50,24 @@ function ProfilePage({ profile }: IProfilePage) {
     setIsPending(true)
     await unfollowFn(profile.id)
     setIsPending(false)
+  }
+
+  const onDeletePost = async (postId: string) => {
+    setPosts(posts.filter((p) => p.post.id !== postId))
+    deletePostFn(postId)
+  }
+
+  const onBlockPost = async (postId: string) => {
+    setPosts(posts.filter((p) => p.post.id !== postId))
+    blockPostFn(postId)
+  }
+
+  const onReportPost = async (postId: string) => {
+    reportPostFn(postId)
+  }
+
+  const onBlockProfile = async (id: string) => {
+    blockProfileFn(id)
   }
 
   return (
@@ -111,7 +138,15 @@ function ProfilePage({ profile }: IProfilePage) {
 
             <div>
               {posts.map((post) => (
-                <Post key={post.post.id} post={post} />
+                <Post
+                  key={post.post.id}
+                  post={post}
+                  onDeletePost={onDeletePost}
+                  onBlockPost={onBlockPost}
+                  onReportPost={onReportPost}
+                  onBlockProfile={onBlockProfile}
+                  fromProfile={fromProfile}
+                />
               ))}
             </div>
           </>
