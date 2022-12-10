@@ -38,7 +38,7 @@ const theme: ThemeProps = {
     },
     dropdown: {
       floating: {
-        base: 'z-50 w-[180px]'
+        base: 'z-50 w-[180px] dark:bg-zinc-900'
       }
     },
     modal: {
@@ -47,6 +47,9 @@ const theme: ThemeProps = {
       },
       header: {
         base: 'flex items-center justify-between rounded-t dark:border-zinc-900 border-b p-5'
+      },
+      footer: {
+        base: 'flex items-center space-x-2 rounded-b border-gray-200 p-6 dark:border-zinc-900 border-t'
       },
       base: 'h-screen fixed top-0 z-50 w-full flex',
       show: {

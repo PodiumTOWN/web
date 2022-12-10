@@ -76,7 +76,9 @@ export default function Post({
               <div className="text-gray-400 relative">
                 {fromProfile && (
                   <Dropdown
-                    label={<MoreSVG className="w-4 h-4 z-40 hover:text-black" />}
+                    label={
+                      <MoreSVG className="w-4 h-4 z-40 hover:text-black dark:hover:text-white" />
+                    }
                     inline={true}
                     arrowIcon={false}
                   >

@@ -95,7 +95,7 @@ function ExplorePage() {
           {profiles.map((profile) => (
             <div
               key={profile.id}
-              className="flex items-center bg-gray-100 p-4 rounded-xl justify-between"
+              className="flex items-center bg-gray-100 dark:bg-zinc-900 p-4 rounded-xl justify-between"
             >
               <Link href={`/${profile.username}`} className="flex items-center gap-4">
                 <div className="relative w-16 h-16 rounded-full overflow-hidden">
