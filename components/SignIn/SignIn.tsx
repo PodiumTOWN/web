@@ -109,6 +109,7 @@ export default function SignIn({ show, onClose, onRegister }: ISignIn) {
             </div>
             <div className="flex gap-1 items-center">
               <Button
+                className="whitespace-nowrap"
                 disabled={isLoading || email.length < 3 || password.length < 5}
                 id="sign-in-button"
                 color="primary"
@@ -187,6 +188,7 @@ export default function SignIn({ show, onClose, onRegister }: ISignIn) {
                   id="sign-in-button"
                   color="primary"
                   onClick={onVerifyPhone}
+                  className="whitespace-nowrap"
                 >
                   {isLoading && (
                     <div className="mr-3">
@@ -221,6 +223,7 @@ export default function SignIn({ show, onClose, onRegister }: ISignIn) {
                 id="sign-in-button"
                 color="primary"
                 onClick={onVerifyCode}
+                className="whitespace-nowrap"
               >
                 {isLoading && (
                   <div className="mr-3">

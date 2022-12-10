@@ -126,7 +126,7 @@ export default function Register({ show, onClose, onSignIn, onRegistered }: IReg
           <span className="text-gray-500">
             By registering you accept Terms of Service and Privacy Policy.
           </span>
-          <Button color="link" onClick={onSignIn}>
+          <Button color="link" onClick={onSignIn} className="whitespace-nowrap">
             Sign In
           </Button>
         </div>
