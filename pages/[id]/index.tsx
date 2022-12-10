@@ -94,7 +94,7 @@ function ProfilePage({ profile }: IProfilePage) {
                 </div>
                 <div className="text-xl font-medium">{profile?.username}</div>
               </div>
-              {fromProfile?.id !== profile.id && (
+              {fromProfile && fromProfile.id !== profile.id && (
                 <>
                   {fromProfile?.following.includes(profile.id) ? (
                     <Button color="primary" onClick={unfollow} disabled={isPending}>

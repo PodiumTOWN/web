@@ -2,11 +2,17 @@ import { ThemeProps } from 'flowbite-react'
 
 const theme: ThemeProps = {
   theme: {
+    label: {
+      base: ''
+    },
     button: {
+      inner: {
+        base: '!p-0'
+      },
       color: {
-        primary: 'bg-gray-900 text-white dark:bg-zinc-800',
+        primary: 'bg-gray-900 text-white dark:bg-zinc-800 !px-4 !py-3 rounded-xl',
         secondary: 'bg-gray-100 dark:bg-zinc-800',
-        link: 'ouline-none focus:border-0 focus:!ring-0'
+        link: 'ouline-none focus:border-0 focus:!ring-0 px-2'
       }
     },
     textarea: {

@@ -112,7 +112,7 @@ export default function SignIn({ show, onClose, onRegister }: ISignIn) {
                 required={true}
               />
             </div>
-            <div className="flex gap-1 items-center">
+            <div className="flex gap-1 items-center justify-between">
               <Button
                 className="whitespace-nowrap"
                 disabled={isLoading || email.length < 3 || password.length < 5}
@@ -148,7 +148,7 @@ export default function SignIn({ show, onClose, onRegister }: ISignIn) {
                 required={true}
               />
             </div>
-            <div className="flex gap-1 items-center">
+            <div className="flex gap-1 items-center justify-between">
               <Button
                 disabled={isLoading || email.length < 3 || password.length < 5}
                 id="sign-in-button"
@@ -187,7 +187,7 @@ export default function SignIn({ show, onClose, onRegister }: ISignIn) {
                 placeholder="Phone number"
                 required={true}
               />
-              <div className="flex items-center">
+              <div className="flex items-center justify-between">
                 <Button
                   disabled={isLoading || phoneNumber.length < 5}
                   id="sign-in-button"
@@ -213,7 +213,7 @@ export default function SignIn({ show, onClose, onRegister }: ISignIn) {
 
       case 2:
         return (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 ">
             <TextInput
               name="verificationCode"
               color="primary"
@@ -223,7 +223,7 @@ export default function SignIn({ show, onClose, onRegister }: ISignIn) {
               placeholder="Verification code"
               required={true}
             />
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-2 items-center justify-between">
               <Button
                 disabled={isLoading || code.length !== 6}
                 id="sign-in-button"
@@ -269,9 +269,11 @@ export default function SignIn({ show, onClose, onRegister }: ISignIn) {
       <Modal.Footer>
         <div className="text-xs text-gray-500 flex justify-between items-center w-full gap-2">
           <span>By signing in you accept Terms of Service and Privacy Policy.</span>
-          <Button color="primary" className="whitespace-nowrap" onClick={onRegister}>
-            Create account
-          </Button>
+          {provider === SignInProvider.EMAIL && (
+            <Button color="primary" className="whitespace-nowrap" onClick={onRegister}>
+              Create account
+            </Button>
+          )}
         </div>
       </Modal.Footer>
     </Modal>

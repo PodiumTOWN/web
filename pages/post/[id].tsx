@@ -104,30 +104,33 @@ function PostPage({ post }: IPostPage) {
           <Loading />
         ) : (
           <>
-            <div className="px-5 my-4 flex gap-2 items-center">
-              <div className="relative w-16 h-16 rounded-full overflow-hidden">
-                <Image
-                  src={fromProfile?.avatarUrl || '/dummy-avatar.png'}
-                  fill
-                  alt="You"
-                  className="object-cover"
+            {fromProfile && (
+              <div className="px-5 my-4 flex gap-2 items-center">
+                <div className="relative w-14 h-14 rounded-full overflow-hidden bg-gray-100 dark:bg-zinc-900">
+                  <Image
+                    src={fromProfile?.avatarUrl || '/dummy-avatar.png'}
+                    fill
+                    alt="You"
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+                <TextInput
+                  value={commentText}
+                  onChange={(e) => setCommentText(e.target.value)}
+                  color="primary"
+                  placeholder="What's on your mind ?"
+                  className="flex-1"
                 />
+                <Button
+                  color="primary"
+                  onClick={sendComment}
+                  disabled={commentText.length < 4}
+                >
+                  Send
+                </Button>
               </div>
-              <TextInput
-                value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
-                color="primary"
-                placeholder="What's on your mind ?"
-                className="flex-1"
-              />
-              <Button
-                color="primary"
-                onClick={sendComment}
-                disabled={commentText.length < 4}
-              >
-                Send
-              </Button>
-            </div>
+            )}
             {comments?.map((comment) => (
               <Post key={comment.post.id} post={comment} />
             ))}
