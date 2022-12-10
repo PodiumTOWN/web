@@ -1,9 +1,10 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import Post from '../../components/Post/Post'
+import { AuthContext } from '../../contexts/AuthContext/AuthContext'
+import { PostsContext } from '../../contexts/PostsContext/PostsContext'
 import { getPostsForHashtag, IPostProfile } from '../../lib/posts'
-import Image from 'next/image'
 import LoadingSVG from '../../public/icons/loading.svg'
 
 function TagPage() {
@@ -11,6 +12,8 @@ function TagPage() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const { tag } = router.query
+  const { blockProfileFn, profile } = useContext(AuthContext)
+  const { deletePostFn, blockPostFn, reportPostFn } = useContext(PostsContext)
 
   useEffect(() => {
     const getData = async () => {
@@ -39,7 +42,17 @@ function TagPage() {
             </div>
           </div>
         ) : (
-          posts?.map((post: any) => <Post key={post.post.id} post={post} />)
+          posts?.map((post: any) => (
+            <Post
+              key={post.post.id}
+              post={post}
+              onDeletePost={deletePostFn}
+              onBlockPost={blockPostFn}
+              onReportPost={reportPostFn}
+              onBlockProfile={blockProfileFn}
+              fromProfile={profile}
+            />
+          ))
         )}
       </div>
     </>
