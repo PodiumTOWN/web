@@ -74,7 +74,10 @@ function ProfilePage({ profile }: IProfilePage) {
     <>
       <Head>
         <title>{title}</title>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1"
+        />
         <meta name="description" content={`${profile.username} on Podium`} />
         <meta
           property="og:description"

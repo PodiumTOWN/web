@@ -57,7 +57,7 @@ const theme: ThemeProps = {
       },
       content: {
         base: 'w-full p-2',
-        inner: 'bg-white dark:bg-black'
+        inner: 'bg-white dark:bg-black z-50 relative'
       }
     }
   }

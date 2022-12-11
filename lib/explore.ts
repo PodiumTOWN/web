@@ -34,8 +34,8 @@ export async function search(searchQuery: string): Promise<IProfile[]> {
   const storage = getStorage()
   const postsQuery = query(
     collection(db, 'users'),
-    where('username', '>=', searchQuery),
-    where('username', '<=', searchQuery + '\uf8ff'),
+    where('username', '>=', searchQuery.toLowerCase()),
+    where('username', '<=', searchQuery.toLowerCase() + '\uf8ff'),
     limit(50)
   )
   const documents = await getDocs(postsQuery)

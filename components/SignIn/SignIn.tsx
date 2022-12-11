@@ -179,6 +179,7 @@ export default function SignIn({ show, onClose, onRegister }: ISignIn) {
           <form>
             <div className="flex flex-col gap-4">
               <TextInput
+                autoComplete="tel"
                 name="phoneNumber"
                 color="primary"
                 value={phoneNumber}
@@ -187,24 +188,28 @@ export default function SignIn({ show, onClose, onRegister }: ISignIn) {
                 placeholder="Phone number"
                 required={true}
               />
-              <div className="flex items-center justify-between">
-                <Button
-                  disabled={isLoading || phoneNumber.length < 5}
-                  id="sign-in-button"
-                  color="primary"
-                  onClick={onVerifyPhone}
-                  className="whitespace-nowrap"
-                >
-                  {isLoading && (
-                    <div className="mr-2 h-4 w-4">
-                      <LoaderSVG />
-                    </div>
-                  )}
-                  <span>Sign in</span>
-                </Button>
-                <Button color="link" onClick={() => setProvider(SignInProvider.EMAIL)}>
-                  Sign In using email address
-                </Button>
+              <div className="flex items-center justify-start">
+                <div className="flex items-center justify-start">
+                  <Button
+                    disabled={isLoading || phoneNumber.length < 5}
+                    id="sign-in-button"
+                    color="primary"
+                    onClick={onVerifyPhone}
+                    className="whitespace-nowrap"
+                  >
+                    {isLoading && (
+                      <div className="mr-2 h-4 w-4">
+                        <LoaderSVG />
+                      </div>
+                    )}
+                    <span>Sign in</span>
+                  </Button>
+                </div>
+                <div className="flex justify-end flex-1">
+                  <Button color="link" onClick={() => setProvider(SignInProvider.EMAIL)}>
+                    Sign In using email address
+                  </Button>
+                </div>
               </div>
             </div>
             <div className="text-sm text-red-700">{error && errorMessage(error)}</div>

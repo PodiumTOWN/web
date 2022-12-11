@@ -65,7 +65,7 @@ function ExplorePage() {
   }
 
   return (
-    <div className="px-6 md:p-12 flex flex-col gap-6">
+    <div className="px-5 md:p-12 flex flex-col gap-6">
       <div className="relative">
         <TextInput
           value={searchQuery}
@@ -83,7 +83,7 @@ function ExplorePage() {
         )}
       </div>
 
-      <div className="h-[16rem] overflow-hidden relative rounded-xl flex justify-center items-center">
+      <div className="h-[8rem] md:h-[16rem] overflow-hidden relative rounded-xl flex justify-center items-center">
         <Link href="/tag/welcome">
           <Image src="/welcome.jpg" alt="Welcome" fill className="object-cover" />
           <div className="z-2 relative text-white">#welcome</div>

@@ -23,11 +23,14 @@ function Profile() {
     <>
       <Head>
         <title>Podium — Profile</title>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1"
+        />
       </Head>
 
       <div className="flex flex-col gap-6 w-full md:max-w-2xl md:border-r-[1px] h-full dark:md:border-r-zinc-900">
-        <div className="flex items-center gap-4 justify-between p-6">
+        <div className="flex items-center gap-4 justify-between p-5">
           <div className="flex items-center gap-4">
             <div className="h-24 w-24 overflow-hidden relative rounded-full bg-gray-100 dark:bg-zinc-900">
               <Image

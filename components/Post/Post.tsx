@@ -114,7 +114,7 @@ export default function Post({
           >
             {post.post.text}
           </div>
-          <div className="relative z-20 flex -mx-1 mt-1" onClick={onImage}>
+          <div className="relative z-20 flex -mx-1 mt-2" onClick={onImage}>
             {post.post.images.map((image) => (
               <div
                 key={image.id}

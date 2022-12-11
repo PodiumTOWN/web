@@ -140,7 +140,7 @@ export function AuthProvider({ children }: any) {
 
   const createProfileFn = async (id: string, username: string) => {
     try {
-      const result = await createProfile(id, username)
+      const result = await createProfile(id, username.toLowerCase())
       setProfile(result)
       return result
     } catch (error) {
