@@ -17,6 +17,7 @@ import { ProfileErrorCode } from '../utils/error'
 export interface IProfile {
   id: string
   username: string
+  createdAt: number
   avatarUrl?: string
   avatarId?: string
   following: string[]
@@ -84,7 +85,8 @@ export async function createProfile(id: string, username: string) {
       username,
       following: [id],
       blockedPosts: [],
-      blockedProfiles: []
+      blockedProfiles: [],
+      createdAt: Math.round(Date.now() / 1000)
     }
     const isAvailable = await isUsernameAvailable(username)
     if (isAvailable) {
