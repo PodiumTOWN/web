@@ -171,9 +171,9 @@ export default function Sidebar() {
           </>
         )}
       </div>
-      <div>
-        <DarkThemeToggle className="hidden md:block mx-8 hover:bg-transparent dark:hover:bg-transparent p-0" />
-        <div className="hidden md:flex justify-center p-8 gap-4 text-gray-300 text-xs">
+      <div className="max-w-xs mx-auto">
+        <DarkThemeToggle className="hidden md:block mx-6 hover:bg-transparent dark:hover:bg-transparent p-0" />
+        <div className="hidden md:flex justify-between p-8 gap-4 text-gray-300 text-xs">
           <Link href="/terms" className="hover:text-gray-400">
             Terms
           </Link>
