@@ -65,7 +65,7 @@ function ExplorePage() {
   }
 
   return (
-    <div className="px-5 md:p-12 flex flex-col gap-6">
+    <div className="px-5 md:p-12 flex flex-col gap-6 md:max-w-4xl">
       <div className="relative">
         <TextInput
           value={searchQuery}

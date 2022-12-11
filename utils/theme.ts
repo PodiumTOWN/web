@@ -59,6 +59,18 @@ const theme: ThemeProps = {
         base: 'w-full p-2',
         inner: 'bg-white dark:bg-black z-50 relative'
       }
+    },
+    carousel: {
+      indicators: {
+        active: {
+          off: 'hover:bg-gray-400 dark:hover:bg-zinc-600'
+        },
+        base: 'h-3 w-3 rounded-full bg-gray-300 dark:bg-zinc-700'
+      },
+      control: {
+        base: 'inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 group-hover:bg-gray-300 group-focus:outline-none group-focus:ring-4 group-focus:ring-white dark:bg-zinc-800 dark:group-hover:bg-zinc-800 dark:group-focus:ring-zinc-800/70 sm:h-10 sm:w-10',
+        icon: 'h-5 w-5 text-black dark:text-gray-400 sm:h-6 sm:w-6'
+      }
     }
   }
 }

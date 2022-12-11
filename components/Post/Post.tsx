@@ -36,13 +36,17 @@ export default function Post({
   }
 
   const onNavigatePost = (e: MouseEvent<HTMLElement>) => {
-    router.push(`/post/${post.post.id}`)
-    e.stopPropagation()
+    if (router.query.id !== post.post.id) {
+      router.push(`/post/${post.post.id}`)
+      e.stopPropagation()
+    }
   }
 
   const onNavigateProfile = (e: MouseEvent<HTMLElement>) => {
-    router.push(`/${post.profile.username}`)
-    e.stopPropagation()
+    if (router.query.id !== post.profile.username) {
+      router.push(`/${post.profile.username}`)
+      e.stopPropagation()
+    }
   }
 
   return (
@@ -65,19 +69,21 @@ export default function Post({
           className="absolute top-0 bottom-0 left-0 right-0 z-10"
         />
         <div className="w-full">
-          <div className="flex justify-between">
+          <div className="flex justify-between items-center">
             <div
               onClick={onNavigateProfile}
               className="z-20 font-semibold hover:underline"
             >
               {post.profile.username}
             </div>
-            <div className="flex items-center gap-2 text-sm z-100">
+            <div className="flex items-center text-sm z-100">
               <div className="text-gray-400 relative">
                 {fromProfile && (
                   <Dropdown
                     label={
-                      <MoreSVG className="w-4 h-4 z-40 hover:text-black dark:hover:text-white" />
+                      <div className="px-3 py-2 z-40 hover:text-black dark:hover:text-white">
+                        <MoreSVG className="w-4 h-4" />
+                      </div>
                     }
                     inline={true}
                     arrowIcon={false}
@@ -114,22 +120,24 @@ export default function Post({
           >
             {post.post.text}
           </div>
-          <div className="relative z-20 flex -mx-1 mt-2" onClick={onImage}>
-            {post.post.images.map((image) => (
-              <div
-                key={image.id}
-                className="flex-1 relative h-[250px] overflow-hidden rounded-xl mx-1 bg-gray-100 dark:bg-zinc-900"
-              >
-                <Image
-                  alt="Image"
-                  src={image.url}
-                  fill
-                  style={{ objectFit: 'cover' }}
-                  priority
-                />
-              </div>
-            ))}
-          </div>
+          {post.post.images.length > 0 && (
+            <div className="relative z-20 flex -mx-1 mt-2" onClick={onImage}>
+              {post.post.images.map((image) => (
+                <div
+                  key={image.id}
+                  className="flex-1 relative h-[250px] overflow-hidden rounded-xl mx-1 bg-gray-100 dark:bg-zinc-900"
+                >
+                  <Image
+                    alt="Image"
+                    src={image.url}
+                    fill
+                    style={{ objectFit: 'cover' }}
+                    priority
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
       <Modal show={isModalVisible} onClose={() => setIsModalVisible(false)} size="5xl">
