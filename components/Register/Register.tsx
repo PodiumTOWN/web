@@ -97,7 +97,9 @@ export default function Register({ show, onClose, onSignIn, onRegistered }: IReg
             />
 
             <Button
-              disabled={isLoading || username.length < (blockchain?.minVoteCount || 3)}
+              disabled={
+                isLoading || username.length < (blockchain?.minUsernameLength || 3)
+              }
               id="sign-in-button"
               color="primary"
               onClick={onCreateProfile}

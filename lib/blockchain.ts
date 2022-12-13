@@ -25,6 +25,7 @@ export interface IProposal {
 
 export interface IAlgorithmData {
   minVoteCount: number
+  minUsernameLength: number
 }
 
 export const PodiumContract = new ethers.Contract(
@@ -59,15 +60,6 @@ export async function getActiveProposals(): Promise<IProposal[]> {
   })
 }
 
-export async function createProposal(
-  title: string,
-  description: string,
-  dataKey: string,
-  dataValue: any
-) {
-  await PodiumContract.createProposal(uuid(), title, description, dataKey, dataValue)
-}
-
 export async function voteOnProposal(proposal: IProposal, vote: boolean) {
   try {
     await PodiumContract.voteOnProposal(proposal.id, vote)
@@ -83,6 +75,9 @@ export async function getAlgorithmData(): Promise<IAlgorithmData> {
     return result.reduce((a: any, v: any) => {
       switch (v.name) {
         case 'minVoteCount':
+          return { ...a, [v.name]: v.uintValue.toNumber() }
+
+        case 'minUsernameLength':
           return { ...a, [v.name]: v.uintValue.toNumber() }
 
         default:

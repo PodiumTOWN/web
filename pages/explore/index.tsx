@@ -8,7 +8,12 @@ import { getTophashtags, IHashtag, search } from '../../lib/explore'
 import Link from 'next/link'
 import { IProfile } from '../../lib/profile'
 import LoaderSVG from '../../public/icons/loading.svg'
-import { getActiveProposals, IProposal, voteOnProposal } from '../../lib/blockchain'
+import {
+  createProposal,
+  getActiveProposals,
+  IProposal,
+  voteOnProposal
+} from '../../lib/blockchain'
 
 function ExplorePage() {
   const [proposals, setProposals] = useState<IProposal[]>([])
