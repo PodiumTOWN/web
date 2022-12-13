@@ -17,16 +17,20 @@ export interface IHashtag {
 }
 
 export async function getTophashtags(): Promise<IHashtag[]> {
-  const db = getFirestore()
-  const postsQuery = query(
-    collection(db, 'hashtags'),
-    orderBy('posts', 'desc'),
-    limit(25)
-  )
-  const documents = await getDocs(postsQuery)
-  const data = documents.docs.map((d) => d.data() as IHashtag)
+  try {
+    const db = getFirestore()
+    const postsQuery = query(
+      collection(db, 'hashtags'),
+      orderBy('posts', 'desc'),
+      limit(25)
+    )
+    const documents = await getDocs(postsQuery)
+    const data = documents.docs.map((d) => d.data() as IHashtag)
 
-  return data
+    return data
+  } catch (error) {
+    throw error
+  }
 }
 
 export async function search(searchQuery: string): Promise<IProfile[]> {

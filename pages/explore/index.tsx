@@ -8,8 +8,10 @@ import { getTophashtags, IHashtag, search } from '../../lib/explore'
 import Link from 'next/link'
 import { IProfile } from '../../lib/profile'
 import LoaderSVG from '../../public/icons/loading.svg'
+import { getActiveProposals, IProposal, voteOnProposal } from '../../lib/blockchain'
 
 function ExplorePage() {
+  const [proposals, setProposals] = useState<IProposal[]>([])
   const [searchQuery, setSearchQuery] = useState('')
   const [isPending, setIsPending] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -28,8 +30,14 @@ function ExplorePage() {
       if (!fromProfile && !iProfileLoading) {
         router.push('/')
       } else {
-        const result = await getTophashtags()
-        setTopHashtags(result)
+        try {
+          const result = await getTophashtags()
+          setTopHashtags(result)
+        } catch {}
+        try {
+          const proposalResult = await getActiveProposals()
+          setProposals(proposalResult)
+        } catch {}
       }
     }
     getData()
@@ -61,6 +69,39 @@ function ExplorePage() {
       setIsLoading(false)
     } else {
       setProfiles([])
+    }
+  }
+
+  const getProposalVotes = (proposal: IProposal) => {
+    const voteYes = proposal.voteYesCount
+    const voteNo = proposal.voteNoCount
+    const total = voteYes + voteNo
+    const yesPercentage = (voteYes / total) * 100
+    const noPercentage = (voteNo / total) * 100
+    if (total === 0) {
+      return 'No votes yet'
+    }
+
+    return (
+      <div className="flex gap-3">
+        <div className="flex items-center gap-1">
+          <div className="w-3 h-3 bg-green-500 rounded-full" />
+          {yesPercentage}%
+        </div>
+        <div className="flex items-center gap-1">
+          <div className="w-3 h-3 bg-red-500 rounded-full" />
+          {noPercentage}%
+        </div>
+        ({total} votes)
+      </div>
+    )
+  }
+
+  const onVote = async (proposal: IProposal, vote: boolean) => {
+    try {
+      await voteOnProposal(proposal, vote)
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -152,19 +193,17 @@ function ExplorePage() {
               <div className="text-gray-400 text-sm">How does it work ?</div>
             </div>
             <div className="flex gap-2">
-              <div className="bg-gray-100 dark:bg-zinc-900 p-4 rounded-xl text-sm font-medium w-full flex justify-between">
-                <div>Ban profile @bot123</div>
-                <div className="flex gap-3">
-                  <div className="flex items-center gap-1">
-                    <div className="w-3 h-3 bg-green-500 rounded-full" />
-                    98%
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-3 h-3 bg-red-500 rounded-full" />
-                    28%
-                  </div>
+              {proposals.map((proposal) => (
+                <div
+                  key={proposal.name}
+                  className="bg-gray-100 dark:bg-zinc-900 p-4 rounded-xl text-sm font-medium w-full flex justify-between"
+                >
+                  <div>{proposal.name}</div>
+                  <div>{proposal.description}</div>
+                  {getProposalVotes(proposal)}
+                  <button onClick={() => onVote(proposal, true)}>Vote yes</button>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
         </>

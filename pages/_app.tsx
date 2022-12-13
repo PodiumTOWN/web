@@ -7,19 +7,22 @@ import { AuthProvider } from '../contexts/AuthContext/AuthContext'
 import { PostsContextProvider } from '../contexts/PostsContext/PostsContext'
 import Layout from '../components/Layout/Layout'
 import theme from '../utils/theme'
+import { SettingsContextProvider } from '../contexts/SettingsContext/SettingsContext'
 
 dayjs.extend(relativeTime)
 
 function App({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
-      <PostsContextProvider>
-        <Flowbite theme={theme}>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </Flowbite>
-      </PostsContextProvider>
+      <SettingsContextProvider>
+        <PostsContextProvider>
+          <Flowbite theme={theme}>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </Flowbite>
+        </PostsContextProvider>
+      </SettingsContextProvider>
     </AuthProvider>
   )
 }

@@ -27,6 +27,7 @@ interface IPostsContext {
   deletePostFn: (postId: string) => Promise<void>
   blockPostFn: (postId: string) => Promise<void>
   reportPostFn: (postId: string) => Promise<void>
+  isLoading: boolean
 }
 
 const PostsContext = createContext<IPostsContext>({
@@ -36,16 +37,19 @@ const PostsContext = createContext<IPostsContext>({
   send: async () => ({} as any),
   deletePostFn: async () => {},
   blockPostFn: async () => {},
-  reportPostFn: async () => {}
+  reportPostFn: async () => {},
+  isLoading: false
 })
 
 const PostsContextProvider = ({ children }: React.PropsWithChildren<any>) => {
-  const { profile, isLoading } = useContext(AuthContext)
+  const [isLoading, setIsLoading] = useState(true)
+  const { profile, isLoading: isAuthLoading } = useContext(AuthContext)
   const [posts, setPosts] = useState<null | IPostProfile[]>(null)
   const [profilePosts, setProfilePosts] = useState<null | IPostProfile[]>(null)
 
   useEffect(() => {
     const getData = async () => {
+      setIsLoading(true)
       if (profile) {
         const posts = await getPostsForProfile(profile.following)
         setPosts(
@@ -55,15 +59,17 @@ const PostsContextProvider = ({ children }: React.PropsWithChildren<any>) => {
         )
         const profilePosts = await getPosts(profile.id)
         setProfilePosts(profilePosts)
+        setIsLoading(false)
       } else {
-        const posts = await getPostsForHashtag('#welcome')
-        setPosts(posts)
+        setIsLoading(false)
+        // const posts = await getPostsForHashtag('#welcome')
+        // setPosts(posts)
       }
     }
-    if (!isLoading) {
+    if (!isAuthLoading) {
       getData()
     }
-  }, [profile, isLoading])
+  }, [profile, isAuthLoading])
 
   const send = async (text: string) => {
     const post: IPostProfile = {
@@ -118,7 +124,8 @@ const PostsContextProvider = ({ children }: React.PropsWithChildren<any>) => {
         send,
         posts,
         profilePosts,
-        setPosts
+        setPosts,
+        isLoading
       }}
     >
       {children}

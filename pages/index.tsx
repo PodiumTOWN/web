@@ -1,14 +1,17 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import { useContext } from 'react'
+import { useRouter } from 'next/router'
+import { useContext, useEffect } from 'react'
 import Post from '../components/Post/Post'
 import { AuthContext } from '../contexts/AuthContext/AuthContext'
 import { PostsContext } from '../contexts/PostsContext/PostsContext'
 import LoaderSVG from '../public/icons/loading.svg'
 
 function HomePage() {
+  const router = useRouter()
   const { profile, blockProfileFn } = useContext(AuthContext)
-  const { posts, deletePostFn, blockPostFn, reportPostFn } = useContext(PostsContext)
+  const { posts, deletePostFn, blockPostFn, reportPostFn, isLoading } =
+    useContext(PostsContext)
 
   const Loading = () => (
     <div className="flex justify-center py-8 w-full">
@@ -17,6 +20,12 @@ function HomePage() {
       </div>
     </div>
   )
+
+  useEffect(() => {
+    if (!isLoading && !posts) {
+      router.push('/tag/welcome')
+    }
+  }, [isLoading, posts, router])
 
   return (
     <>

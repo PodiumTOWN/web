@@ -18,8 +18,10 @@ function TagPage() {
   useEffect(() => {
     const getData = async () => {
       setIsLoading(true)
-      const result = await getPostsForHashtag(`#${tag}`)
-      setPosts(result)
+      try {
+        const result = await getPostsForHashtag(`#${tag}`)
+        setPosts(result)
+      } catch {}
       setIsLoading(false)
     }
     if (tag) {
@@ -38,6 +40,8 @@ function TagPage() {
       </Head>
 
       <div className="w-full md:max-w-2xl md:border-r-[1px] h-full dark:md:border-r-zinc-800">
+        <div className="p-5 text-lg font-semibold">#{tag}</div>
+
         {isLoading ? (
           <div className="flex justify-center py-8 w-full">
             <div className="w-7 h-7">

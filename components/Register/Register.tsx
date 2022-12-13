@@ -2,6 +2,7 @@ import { UserCredential } from 'firebase/auth'
 import { Button, Spinner, TextInput, Modal } from 'flowbite-react'
 import { useContext, useState } from 'react'
 import { AuthContext } from '../../contexts/AuthContext/AuthContext'
+import { SettingsContext } from '../../contexts/SettingsContext/SettingsContext'
 import { errorMessage, ProfileErrorCode } from '../../utils/error'
 
 interface IRegister {
@@ -12,6 +13,7 @@ interface IRegister {
 }
 
 export default function Register({ show, onClose, onSignIn, onRegistered }: IRegister) {
+  const { blockchain } = useContext(SettingsContext)
   const { createAccount, createProfileFn } = useContext(AuthContext)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -95,7 +97,7 @@ export default function Register({ show, onClose, onSignIn, onRegistered }: IReg
             />
 
             <Button
-              disabled={isLoading || username.length < 3}
+              disabled={isLoading || username.length < (blockchain?.minVoteCount || 3)}
               id="sign-in-button"
               color="primary"
               onClick={onCreateProfile}
