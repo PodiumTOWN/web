@@ -1,33 +1,10 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useContext, useEffect, useState } from 'react'
-import Post from '../../components/Post/Post'
-import { AuthContext } from '../../contexts/AuthContext/AuthContext'
-import { PostsContext } from '../../contexts/PostsContext/PostsContext'
-import { getPostsForHashtag, IPostProfile } from '../../lib/posts'
-import LoadingSVG from '../../public/icons/loading.svg'
+import HashtagList from '../../components/HashtagList/HashtagList'
 
 function TagPage() {
-  const [posts, setPosts] = useState<IPostProfile[]>([])
-  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const { tag } = router.query
-  const { blockProfileFn, profile } = useContext(AuthContext)
-  const { deletePostFn, blockPostFn, reportPostFn } = useContext(PostsContext)
-
-  useEffect(() => {
-    const getData = async () => {
-      setIsLoading(true)
-      try {
-        const result = await getPostsForHashtag(`#${tag}`)
-        setPosts(result)
-      } catch {}
-      setIsLoading(false)
-    }
-    if (tag) {
-      getData()
-    }
-  }, [tag])
 
   return (
     <>
@@ -37,31 +14,19 @@ function TagPage() {
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1"
         />
+        <meta name="description" content="Open social network." />
+        <meta property="og:description" content="Open social network" key="ogdesc" />
+        <meta property="og:url" content="https://podium.town" key="ogurl" />
+        <meta property="og:image" content="https://podium.town/logo.png" key="ogimage" />
+        <meta
+          property="og:site_name"
+          content="Podium — Open social network"
+          key="ogsitename"
+        />
+        <meta property="og:title" content="Open social network." key="ogtitle" />
       </Head>
 
-      <div className="w-full md:max-w-2xl md:border-r-[1px] h-full dark:md:border-r-zinc-800">
-        <div className="p-5 text-lg font-semibold">#{tag}</div>
-
-        {isLoading ? (
-          <div className="flex justify-center py-8 w-full">
-            <div className="w-7 h-7">
-              <LoadingSVG />
-            </div>
-          </div>
-        ) : (
-          posts?.map((post: any) => (
-            <Post
-              key={post.post.id}
-              post={post}
-              onDeletePost={deletePostFn}
-              onBlockPost={blockPostFn}
-              onReportPost={reportPostFn}
-              onBlockProfile={blockProfileFn}
-              fromProfile={profile}
-            />
-          ))
-        )}
-      </div>
+      <HashtagList hashtag={tag as string} />
     </>
   )
 }

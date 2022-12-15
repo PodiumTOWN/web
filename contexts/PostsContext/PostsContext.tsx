@@ -60,10 +60,6 @@ const PostsContextProvider = ({ children }: React.PropsWithChildren<any>) => {
         const profilePosts = await getPosts(profile.id)
         setProfilePosts(profilePosts)
         setIsLoading(false)
-      } else {
-        setIsLoading(false)
-        // const posts = await getPostsForHashtag('#welcome')
-        // setPosts(posts)
       }
     }
     if (!isAuthLoading) {
