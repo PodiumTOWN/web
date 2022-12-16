@@ -115,7 +115,17 @@ export function AuthProvider({ children }: any) {
   }
 
   const verifyCode = async (code: string) => {
-    await confirmationResult?.confirm(code)
+    try {
+      let result = await confirmationResult?.confirm(code)
+      if (result) {
+        setUser(result)
+        const profile = await getProfile(result.user.uid)
+        setProfile(profile)
+        return profile
+      }
+    } catch (error) {
+      throw error
+    }
   }
 
   const signInWithEmail = async (email: string, password: string) => {

@@ -4,6 +4,7 @@ import { Modal, Button, TextInput } from 'flowbite-react'
 import { AuthContext } from '../../contexts/AuthContext/AuthContext'
 import { errorMessage, ProfileErrorCode } from '../../utils/error'
 import LoaderSVG from '../../public/icons/loading.svg'
+import { SettingsContext } from '../../contexts/SettingsContext/SettingsContext'
 
 interface ISignIn {
   show: boolean
@@ -17,6 +18,7 @@ enum SignInProvider {
 }
 
 export default function SignIn({ show, onClose, onRegister }: ISignIn) {
+  const { blockchain } = useContext(SettingsContext)
   const [error, setError] = useState<ProfileErrorCode | null>(null)
   const [provider, setProvider] = useState<SignInProvider>(SignInProvider.PHONE)
   const [isLoading, setIsLoading] = useState(false)
@@ -57,9 +59,23 @@ export default function SignIn({ show, onClose, onRegister }: ISignIn) {
     }
   }
 
-  const onVerifyCode = () => {
-    setIsLoading(true)
-    verifyCode(code)
+  const onVerifyCode = async () => {
+    try {
+      setIsLoading(true)
+      await verifyCode(code)
+    } catch (error) {
+      switch (error) {
+        case ProfileErrorCode.PROFILE_NOT_FOUND:
+          setError(null)
+          setIsLoading(false)
+          setStep(3)
+          break
+
+        default:
+          setError(error as ProfileErrorCode)
+          break
+      }
+    }
   }
 
   const onSignInWithEmail = async () => {
@@ -85,7 +101,15 @@ export default function SignIn({ show, onClose, onRegister }: ISignIn) {
         await createProfileFn(user.user.uid, username)
       }
     } catch (error) {
-      throw error
+      switch (error) {
+        case ProfileErrorCode.USERNAME_TAKEN:
+          setError(error)
+          break
+
+        default:
+          setError(error as ProfileErrorCode)
+          break
+      }
     }
   }
 
@@ -246,7 +270,45 @@ export default function SignIn({ show, onClose, onRegister }: ISignIn) {
               <Button color="link" onClick={() => setProvider(SignInProvider.EMAIL)}>
                 Sign In using email address
               </Button>
+              <div className="text-sm text-red-700">{error && errorMessage(error)}</div>
             </div>
+          </div>
+        )
+
+      case 3:
+        return (
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
+              <TextInput
+                color="primary"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                type="text"
+                placeholder="Username"
+                required={true}
+              />
+            </div>
+            <div className="flex gap-1 items-center justify-between">
+              <Button
+                disabled={
+                  isLoading || username.length < (blockchain?.minUsernameLength || 3)
+                }
+                id="sign-in-button"
+                color="primary"
+                onClick={onCreateProfile}
+              >
+                {isLoading && (
+                  <div className="mr-2 h-4 w-4">
+                    <LoaderSVG />
+                  </div>
+                )}
+                Sign in
+              </Button>
+              <Button color="link" onClick={() => setProvider(SignInProvider.PHONE)}>
+                Sign In using phone number
+              </Button>
+            </div>
+            <div className="text-sm text-red-700">{error && errorMessage(error)}</div>
           </div>
         )
 
