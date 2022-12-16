@@ -35,7 +35,7 @@ export default function PostList({ hashtag }: IPostList) {
   }, [hashtag, posts])
 
   return (
-    <div className="w-full md:max-w-2xl md:border-r-[1px] h-full dark:md:border-r-zinc-900">
+    <div>
       {localPosts && !isLoading ? (
         localPosts.length ? (
           localPosts.map((post) => (

@@ -253,23 +253,25 @@ export default function SignIn({ show, onClose, onRegister }: ISignIn) {
               required={true}
             />
             <div className="flex gap-2 items-center justify-between">
-              <Button
-                disabled={isLoading || code.length !== 6}
-                id="sign-in-button"
-                color="primary"
-                onClick={onVerifyCode}
-                className="whitespace-nowrap"
-              >
-                {isLoading && (
-                  <div className="mr-2 h-4 w-4">
-                    <LoaderSVG />
-                  </div>
-                )}
-                Sign in
-              </Button>
-              <Button color="link" onClick={() => setProvider(SignInProvider.EMAIL)}>
-                Sign In using email address
-              </Button>
+              <div className="flex items-center justify-between flex-1">
+                <Button
+                  disabled={isLoading || code.length !== 6}
+                  id="sign-in-button"
+                  color="primary"
+                  onClick={onVerifyCode}
+                  className="whitespace-nowrap"
+                >
+                  {isLoading && (
+                    <div className="mr-2 h-4 w-4">
+                      <LoaderSVG />
+                    </div>
+                  )}
+                  Sign in
+                </Button>
+                <Button color="link" onClick={() => setProvider(SignInProvider.EMAIL)}>
+                  Sign In using email address
+                </Button>
+              </div>
               <div className="text-sm text-red-700">{error && errorMessage(error)}</div>
             </div>
           </div>

@@ -172,8 +172,22 @@ export default function Sidebar() {
         )}
       </div>
       <div className="max-w-xs mx-auto">
-        <DarkThemeToggle className="hidden md:block mx-6 hover:bg-transparent dark:hover:bg-transparent p-0" />
-        <div className="hidden md:flex justify-between p-8 gap-4 text-gray-300 text-xs">
+        <div className="hidden md:flex items-center pr-8 gap-2">
+          <DarkThemeToggle className="hidden md:block ml-6 hover:bg-transparent dark:hover:bg-transparent p-0" />
+          <Link
+            href="https://apps.apple.com/pl/app/podium-open-social-network/id6444365765"
+            className="text-gray-300 text-xs hover:text-gray-400"
+          >
+            iOS App
+          </Link>
+          <Link
+            href="https://github.com/podium-town"
+            className="text-gray-300 text-xs hover:text-gray-400"
+          >
+            Source Code
+          </Link>
+        </div>
+        <div className="hidden md:flex justify-between px-8 pb-8 pt-2 gap-4 text-gray-300 text-xs">
           <Link href="/terms" className="hover:text-gray-400">
             Terms
           </Link>

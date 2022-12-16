@@ -29,7 +29,9 @@ function HomePage() {
         <meta property="og:title" content="Open social network." key="ogtitle" />
       </Head>
 
-      {!isLoading && !profile ? <HashtagList hashtag="welcome" /> : <PostList />}
+      <div className="w-full md:max-w-2xl md:border-r-[1px] h-full dark:md:border-r-zinc-900">
+        {!isLoading && !profile ? <HashtagList hashtag="welcome" /> : <PostList />}
+      </div>
     </>
   )
 }
